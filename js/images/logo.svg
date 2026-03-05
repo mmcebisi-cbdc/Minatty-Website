@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Gradient definitions -->
+  <defs>
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0066cc;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#00b8a9;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Open book shape --> 
+  <path d="M 40 80 Q 40 60, 60 60 L 90 60 L 90 140 L 60 140 Q 40 140, 40 120 Z" 
+        fill="url(#logoGradient)" opacity="0.9"/>
+  <path d="M 160 80 Q 160 60, 140 60 L 110 60 L 110 140 L 140 140 Q 160 140, 160 120 Z" 
+        fill="url(#logoGradient)"/>
+  
+  <!-- Connection/link symbol integrated -->
+  <circle cx="70" cy="90" r="15" fill="none" stroke="#fff" stroke-width="4"/>
+  <circle cx="130" cy="90" r="15" fill="none" stroke="#fff" stroke-width="4"/>
+  <line x1="85" y1="90" x2="115" y2="90" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+  
+  <!-- Education accent marks -->
+  <circle cx="100" cy="50" r="8" fill="#FFD700"/>
+  <circle cx="100" cy="150" r="8" fill="#FFD700"/>
+</svg>

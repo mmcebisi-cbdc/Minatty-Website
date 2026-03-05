@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - Minatty Learning Hub</title>
+    <link rel="icon" type="image/svg+xml" href="images/logo_white.svg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            min-height: 100vh;
+            background: #0f172a;
+            overflow-x: hidden;
+        }
+
+        #bg-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .page-wrap {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px 16px;
+        }
+
+        /* In-card logo */
+        .card-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .card-logo img {
+            height: 44px;
+            width: auto;
+        }
+
+        .card-logo span {
+            color: white;
+            font-size: 1.15rem;
+            font-weight: 800;
+            letter-spacing: -0.4px;
+        }
+
+        /* Glass card */
+        .auth-card {
+            width: 100%;
+            max-width: 420px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 22px;
+            padding: 40px 34px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        }
+
+        .auth-card-title {
+            display: none;
+        }
+
+        .auth-card-sub {
+            color: rgba(255, 255, 255, 0.5);
+            text-align: center;
+            font-size: 0.9rem;
+            margin-bottom: 28px;
+        }
+
+        /* Google btn */
+        .btn-google {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 13px;
+            background: white;
+            color: #1e293b;
+            border: none;
+            border-radius: 11px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
+        }
+
+        .btn-google:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 22px rgba(0, 0, 0, 0.35);
+        }
+
+        .btn-google img {
+            width: 20px;
+            height: 20px;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 20px 0;
+            color: rgba(255, 255, 255, 0.28);
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            color: rgba(255, 255, 255, 0.75);
+            font-size: 0.83rem;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1.5px solid rgba(255, 255, 255, 0.12);
+            border-radius: 10px;
+            color: white;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s, background 0.2s;
+            font-family: inherit;
+        }
+
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.28);
+        }
+
+        .form-control:focus {
+            border-color: #0d9488;
+            background: rgba(13, 148, 136, 0.08);
+            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.2);
+        }
+
+        /* Submit button — SITE COLORS */
+        .btn-submit {
+            width: 100%;
+            margin-top: 6px;
+            padding: 13px;
+            background: linear-gradient(135deg, #0f172a 0%, #0d9488 100%);
+            color: white;
+            border: none;
+            border-radius: 11px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+            box-shadow: 0 4px 18px rgba(13, 148, 136, 0.35);
+            letter-spacing: 0.2px;
+            font-family: inherit;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(13, 148, 136, 0.45);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .forgot-row {
+            text-align: right;
+            margin: -6px 0 14px;
+        }
+
+        .forgot-row a {
+            color: #2dd4bf;
+            font-size: 0.82rem;
+            text-decoration: none;
+        }
+
+        .forgot-row a:hover {
+            text-decoration: underline;
+        }
+
+        .error-msg {
+            background: rgba(244, 63, 94, 0.13);
+            border: 1px solid rgba(244, 63, 94, 0.35);
+            color: #fda4af;
+            border-radius: 9px;
+            padding: 10px 13px;
+            font-size: 0.87rem;
+            margin-bottom: 14px;
+            display: none;
+        }
+
+        .success-msg {
+            background: rgba(16, 185, 129, 0.13);
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            color: #6ee7b7;
+            border-radius: 9px;
+            padding: 10px 13px;
+            font-size: 0.87rem;
+            margin-bottom: 14px;
+            text-align: center;
+            display: none;
+        }
+
+        .auth-footer {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.86rem;
+            margin-top: 20px;
+        }
+
+        .auth-footer a {
+            color: #2dd4bf;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 480px) {
+            .auth-card {
+                padding: 28px 20px;
+                border-radius: 18px;
+            }
+
+            .auth-card-title {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="bg-canvas"></canvas>
+
+    <div class="page-wrap">
+        <div class="auth-card">
+            <div class="card-logo">
+                <span>Minatty Learning Hub</span>
+            </div>
+            <h1 class="auth-card-title">Welcome Back 👋</h1>
+            <p class="auth-card-sub">Sign in to continue learning</p>
+
+            <div id="errorMsg" class="error-msg"></div>
+            <div id="successMsg" class="success-msg"></div>
+
+            <button class="btn-google" id="googleBtn" type="button">
+                <img src="images/Logo.png" alt="Minatty" style="height:20px;width:auto;">
+                Continue with Google
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+            </button>
+
+            <div class="divider">or sign in with email</div>
+
+            <form id="loginForm" autocomplete="on" novalidate>
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" id="email" class="form-control" required autocomplete="email"
+                        placeholder="you@example.com">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="password" class="form-control" required autocomplete="current-password"
+                        placeholder="••••••••">
+                </div>
+                <div class="forgot-row">
+                    <a href="forgot-password.html">Forgot password?</a>
+                </div>
+                <button type="submit" class="btn-submit" id="submitBtn">
+                    <i class="fas fa-sign-in-alt" style="margin-right:6px;"></i> Sign In
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                Don't have an account? <a href="register.html">Sign up free</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3D Background -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+    <script>
+        (function () {
+            const canvas = document.getElementById('bg-canvas');
+            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 200);
+            camera.position.set(0, 0, 30);
+
+            // Orbs using site colors: dark navy + teal
+            const orbColors = [0x0f172a, 0x0d9488, 0x0f766e, 0x334155, 0x2dd4bf, 0x475569];
+            const orbs = [];
+            for (let i = 0; i < 20; i++) {
+                const r = 0.5 + Math.random() * 3;
+                const geo = new THREE.SphereGeometry(r, 32, 32);
+                const col = orbColors[Math.floor(Math.random() * orbColors.length)];
+                const mat = new THREE.MeshPhongMaterial({
+                    color: col, transparent: true,
+                    opacity: 0.1 + Math.random() * 0.22,
+                    shininess: 100, specular: 0x2dd4bf
+                });
+                const mesh = new THREE.Mesh(geo, mat);
+                mesh.position.set((Math.random() - 0.5) * 55, (Math.random() - 0.5) * 44, (Math.random() - 0.5) * 30 - 5);
+                mesh.userData = { vx: (Math.random() - 0.5) * 0.014, vy: (Math.random() - 0.5) * 0.014, rs: (Math.random() - 0.5) * 0.008 };
+                scene.add(mesh); orbs.push(mesh);
+            }
+            // Particles
+            const pc = 320;
+            const pp = new Float32Array(pc * 3);
+            const pv = [];
+            for (let i = 0; i < pc; i++) {
+                pp[i * 3] = (Math.random() - 0.5) * 80; pp[i * 3 + 1] = (Math.random() - 0.5) * 60; pp[i * 3 + 2] = (Math.random() - 0.5) * 40;
+                pv.push((Math.random() - 0.5) * 0.007, (Math.random() - 0.5) * 0.007, 0);
+            }
+            const pGeo = new THREE.BufferGeometry();
+            pGeo.setAttribute('position', new THREE.BufferAttribute(pp, 3));
+            const pMat = new THREE.PointsMaterial({ color: 0x2dd4bf, size: 0.22, transparent: true, opacity: 0.5 });
+            scene.add(new THREE.Points(pGeo, pMat));
+
+            scene.add(new THREE.AmbientLight(0xffffff, 0.4));
+            const pl1 = new THREE.PointLight(0x0d9488, 2.5, 90); pl1.position.set(15, 15, 10); scene.add(pl1);
+            const pl2 = new THREE.PointLight(0x334155, 2, 90); pl2.position.set(-15, -10, 5); scene.add(pl2);
+
+            let mx = 0, my = 0;
+            window.addEventListener('mousemove', e => { mx = (e.clientX / innerWidth - 0.5) * 0.6; my = (e.clientY / innerHeight - 0.5) * 0.6; });
+            let t = 0;
+            function animate() {
+                requestAnimationFrame(animate); t += 0.004;
+                orbs.forEach(o => {
+                    o.position.x += o.userData.vx; o.position.y += o.userData.vy;
+                    o.rotation.x += o.userData.rs; o.rotation.y += o.userData.rs * 0.7;
+                    if (Math.abs(o.position.x) > 30) o.userData.vx *= -1;
+                    if (Math.abs(o.position.y) > 24) o.userData.vy *= -1;
+                });
+                const pos = pGeo.attributes.position.array;
+                for (let i = 0; i < pc; i++) { pos[i * 3] += pv[i * 3]; pos[i * 3 + 1] += pv[i * 3 + 1]; if (Math.abs(pos[i * 3]) > 42) pv[i * 3] *= -1; if (Math.abs(pos[i * 3 + 1]) > 32) pv[i * 3 + 1] *= -1; }
+                pGeo.attributes.position.needsUpdate = true;
+                camera.position.x += (mx - camera.position.x) * 0.04;
+                camera.position.y += (-my - camera.position.y) * 0.04;
+                camera.lookAt(0, 0, 0);
+                renderer.render(scene, camera);
+            }
+            animate();
+            window.addEventListener('resize', () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); });
+        })();
+    </script>
+
+    <!-- Form logic -->
+    <script type="module">
+        import auth from './js/auth.js';
+
+        // Hide Google button since OAuth requires InsForge
+        const googleBtn = document.getElementById('googleBtn');
+        if (googleBtn) googleBtn.style.display = 'none';
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('errorMsg');
+            const successDiv = document.getElementById('successMsg');
+            const btn = document.getElementById('submitBtn');
+
+            errorDiv.style.display = 'none';
+            successDiv.style.display = 'none';
+
+            if (!email || !password) {
+                errorDiv.textContent = 'Please fill in all fields.';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right:6px;"></i> Signing in…';
+            btn.disabled = true;
+
+            const result = await auth.login(email, password);
+
+            if (result.success) {
+                document.getElementById('loginForm').reset();
+                successDiv.textContent = '✓ Signed in successfully! Redirecting…';
+                successDiv.style.display = 'block';
+
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 800);
+            } else {
+                errorDiv.textContent = result.error || 'Login failed. Please check your credentials.';
+                errorDiv.style.display = 'block';
+                btn.innerHTML = '<i class="fas fa-sign-in-alt" style="margin-right:6px;"></i> Sign In';
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+
+</html>

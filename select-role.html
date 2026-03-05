@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Your Role - Minatty Learning Hub</title>
+    <link rel="icon" type="image/svg+xml" href="images/logo_white.svg">
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f0f4ff 0%, #fafafa 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .role-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 12px 50px rgba(0, 0, 0, 0.1);
+            padding: 48px 40px;
+            max-width: 520px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .role-card img.logo {
+            height: 52px;
+            width: auto;
+            margin-bottom: 24px;
+        }
+
+        .role-card h1 {
+            font-size: 1.7rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--color-text);
+        }
+
+        .role-card p {
+            color: #6b7280;
+            margin-bottom: 32px;
+            font-size: 1rem;
+        }
+
+        .role-options {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .role-btn {
+            flex: 1;
+            padding: 28px 16px;
+            border: 2.5px solid #e5e7eb;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.25s;
+            background: white;
+            text-align: center;
+        }
+
+        .role-btn:hover {
+            border-color: var(--color-primary, #4f46e5);
+            background: #f5f3ff;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(79, 70, 229, 0.12);
+        }
+
+        .role-btn.selected {
+            border-color: var(--color-primary, #4f46e5);
+            background: #f5f3ff;
+        }
+
+        .role-btn i {
+            font-size: 2.5rem;
+            color: var(--color-primary, #4f46e5);
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .role-btn strong {
+            display: block;
+            font-size: 1.05rem;
+            color: var(--color-text);
+            margin-bottom: 6px;
+        }
+
+        .role-btn span {
+            font-size: 0.82rem;
+            color: #9ca3af;
+            line-height: 1.4;
+        }
+
+        .confirm-btn {
+            width: 100%;
+            padding: 14px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        .error-message {
+            color: #dc2626;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin-top: 12px;
+            font-size: 0.9rem;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="role-card">
+        <img src="images/Logo.png" alt="Minatty Learning Hub" class="logo">
+        <h1>Welcome to Minatty!</h1>
+        <p>How will you be using Minatty Learning Hub?</p>
+
+        <div class="role-options">
+            <div class="role-btn selected" id="roleStudent" onclick="selectRole('student')">
+                <i class="fas fa-graduation-cap"></i>
+                <strong>I'm a Student</strong>
+                <span>I want to find expert tutors and book sessions</span>
+            </div>
+            <div class="role-btn" id="roleTutor" onclick="selectRole('tutor')">
+                <i class="fas fa-chalkboard-teacher"></i>
+                <strong>I'm a Tutor</strong>
+                <span>I want to teach and help students succeed</span>
+            </div>
+        </div>
+
+        <button class="btn btn-primary confirm-btn" id="confirmBtn" onclick="confirmRole()">
+            Continue as Student →
+        </button>
+
+        <div id="errorMsg" class="error-message"></div>
+    </div>
+
+    <script type="module">
+        import client from './js/insforge.js';
+
+        let selectedRole = 'student';
+
+        window.selectRole = (role) => {
+            selectedRole = role;
+            document.getElementById('roleStudent').classList.toggle('selected', role === 'student');
+            document.getElementById('roleTutor').classList.toggle('selected', role === 'tutor');
+            const label = role === 'student' ? 'Student' : 'Tutor';
+            document.getElementById('confirmBtn').textContent = `Continue as ${label} →`;
+        };
+
+        window.confirmRole = async () => {
+            const btn = document.getElementById('confirmBtn');
+            const errorMsg = document.getElementById('errorMsg');
+            btn.textContent = 'Saving...';
+            btn.disabled = true;
+            errorMsg.style.display = 'none';
+
+            try {
+                const { data: authData } = await client.auth.getUser();
+                const userId = authData?.user?.id;
+                if (!userId) throw new Error('Session not found. Please log in again.');
+
+                // Update the profile role
+                const { error } = await client.db.from('profiles')
+                    .update({ role: selectedRole })
+                    .eq('id', userId);
+
+                if (error) throw error;
+
+                // Update localStorage
+                const stored = localStorage.getItem('user');
+                if (stored) {
+                    const user = JSON.parse(stored);
+                    user.role = selectedRole;
+                    localStorage.setItem('user', JSON.stringify(user));
+                }
+
+                window.location.href = 'index.html';
+            } catch (err) {
+                console.error('Role selection error:', err);
+                errorMsg.textContent = err.message || 'Failed to save role. Please try again.';
+                errorMsg.style.display = 'block';
+                btn.textContent = `Continue as ${selectedRole === 'student' ? 'Student' : 'Tutor'} →`;
+                btn.disabled = false;
+            }
+        };
+    </script>
+</body>
+
+</html>

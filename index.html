@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Find the perfect Math and Physical Science tutor for high school learners. Expert tutors, proven results, flexible scheduling.">
+    <title>Find the Perfect Math & Physical Science Tutor | Minatty Learning Hub</title>
+    <link rel="icon" type="image/svg+xml" href="images/logo_white.svg">
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <!-- Header & Navigation -->
+    <header class="header" id="header">
+        <div class="container header-container">
+            <a href="index.html" class="logo">
+                <img src="images/Logo.png" alt="Minatty Learning Hub Logo" style="height: 50px; width: auto;">
+                <span style="margin-left: 12px;">Minatty Learning Hub</span>
+            </a>
+
+            <nav class="nav">
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="index.html" class="nav-link active">Home</a></li>
+                    <li><a href="subjects.html" class="nav-link">Subjects</a></li>
+                    <li><a href="how-it-works.html" class="nav-link">How It Works</a></li>
+                    <li><a href="become-tutor.html" class="nav-link" id="navBecomeTutor">Become a Tutor</a></li>
+
+                    <li><a href="tutors.html" class="nav-link" id="navFindTutors">Find Tutors</a></li>
+                    <li id="authButtons" class="auth-buttons-container">
+                        <!-- Auth buttons injected by js/auth.js -->
+                        <a href="login.html" class="btn btn-outline" style="padding: 8px 16px; font-size: 0.9rem;">Sign
+                            In</a>
+                        <a href="register.html" class="btn btn-primary"
+                            style="padding: 8px 16px; font-size: 0.9rem;">Get Started</a>
+                    </li>
+                </ul>
+
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text slide-up">
+                    <h1>Find the Perfect Tutor for Grades 4-12</h1>
+                    <p>Help your child improve results and get their confidence back with expert one-on-one tutoring in
+                        all major school subjects.
+                    </p>
+
+                    <div class="hero-cta">
+                        <a href="tutors.html" class="btn btn-primary btn-lg">Find a Tutor</a>
+                    </div>
+
+                    <div class="trust-indicators">
+                        <div class="trust-badge">
+                            <span class="stars">⭐⭐⭐⭐⭐</span>
+                            <span>Excellent • 2,300+ reviews</span>
+                        </div>
+                        <div class="trust-badge">
+                            <span>✓</span>
+                            <span>Verified Tutors</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hero-image fade-in">
+                    <img src="images/hero_students_studying_1769987340836.png"
+                        alt="Students studying mathematics together">
+                </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="search-bar">
+                <div class="search-field">
+                    <label for="subject">Subject</label>
+                    <select id="subject">
+                        <option value="">Select subject</option>
+                        <option value="mathematics">Mathematics</option>
+                        <option value="physical-science">Physical Science</option>
+                        <option value="english">English</option>
+                        <option value="coding">Coding</option>
+                        <option value="accounting">Accounting</option>
+                        <option value="life-sciences">Life Sciences</option>
+                    </select>
+                </div>
+
+                <div class="search-field">
+                    <label for="grade">Grade Level</label>
+                    <select id="grade">
+                        <option value="">Select grade</option>
+                        <option value="12">Grade 12</option>
+                        <option value="11">Grade 11</option>
+                        <option value="10">Grade 10</option>
+                        <option value="9">Grade 9</option>
+                        <option value="8">Grade 8</option>
+                        <option value="7">Grade 7</option>
+                        <option value="6">Grade 6</option>
+                        <option value="5">Grade 5</option>
+                        <option value="4">Grade 4</option>
+                    </select>
+                </div>
+
+                <div class="search-field">
+                    <label for="location">Location</label>
+                    <input type="text" id="location" placeholder="Enter your city">
+                </div>
+
+                <button class="btn btn-primary btn-lg" onclick="window.location.href='tutors.html'">Search</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="section">
+        <div class="container">
+            <div class="text-center mb-8">
+                <h2>How It Works</h2>
+                <p class="text-muted">Find your perfect tutor in 4 simple steps</p>
+            </div>
+
+            <div class="grid grid-4">
+                <div class="card text-center">
+                    <div style="font-size: 3rem; margin-bottom: var(--space-4);">🔍</div>
+                    <div class="card-header">
+                        <h4 class="card-title">1. Search</h4>
+                    </div>
+                    <div class="card-body">
+                        Browse verified tutors by subject, grade level, and location.
+                    </div>
+                </div>
+
+                <div class="card text-center">
+                    <div style="font-size: 3rem; margin-bottom: var(--space-4);">👤</div>
+                    <div class="card-header">
+                        <h4 class="card-title">2. View Profiles</h4>
+                    </div>
+                    <div class="card-body">
+                        Review tutor qualifications, experience, and student reviews.
+                    </div>
+                </div>
+
+                <div class="card text-center">
+                    <div style="font-size: 3rem; margin-bottom: var(--space-4);">📅</div>
+                    <div class="card-header">
+                        <h4 class="card-title">3. Book a Lesson</h4>
+                    </div>
+                    <div class="card-body">
+                        Schedule online or in-person sessions that fit your calendar.
+                    </div>
+                </div>
+
+                <div class="card text-center">
+                    <div style="font-size: 3rem; margin-bottom: var(--space-4);">🎓</div>
+                    <div class="card-header">
+                        <h4 class="card-title">4. Learn & Grow</h4>
+                    </div>
+                    <div class="card-body">
+                        Attend sessions and watch your results improve dramatically.
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-6">
+                <a href="how-it-works.html" class="btn btn-outline">Learn More</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="section" style="background-color: var(--color-bg-light-gray);">
+        <div class="container">
+            <div class="text-center mb-8">
+                <h2>Why Choose Minatty Learning Hub?</h2>
+                <p class="text-muted">The most effective tutoring platform for Math and Physical Science</p>
+            </div>
+
+            <div class="grid grid-3">
+                <div class="card">
+                    <div class="card-header">
+                        <div style="font-size: 2.5rem; margin-bottom: var(--space-3);">✓</div>
+                        <h4 class="card-title">Expert Tutors</h4>
+                    </div>
+                    <div class="card-body">
+                        All tutors are rigorously screened, verified, and have proven track records of student success
+                        in Math and Physical Science.
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div style="font-size: 2.5rem; margin-bottom: var(--space-3);">⏰</div>
+                        <h4 class="card-title">Flexible Scheduling</h4>
+                    </div>
+                    <div class="card-body">
+                        Book sessions that fit your schedule. Choose online or in-person tutoring based on your
+                        preference.
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div style="font-size: 2.5rem; margin-bottom: var(--space-3);">📈</div>
+                        <h4 class="card-title">Proven Results</h4>
+                    </div>
+                    <div class="card-body">
+                        Our students see an average improvement of 20-30% in their test scores within the first 3
+                        months.
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div style="font-size: 2.5rem; margin-bottom: var(--space-3);">🔐</div>
+                        <h4 class="card-title">Safe & Verified</h4>
+                    </div>
+                    <div class="card-body">
+                        Every tutor undergoes background checks and identity verification for your peace of mind.
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div style="font-size: 2.5rem; margin-bottom: var(--space-3);">💰</div>
+                        <h4 class="card-title">Transparent Pricing</h4>
+                    </div>
+                    <div class="card-body">
+                        See tutor rates upfront. No hidden fees. Pay only for the lessons you book.
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div style="font-size: 2.5rem; margin-bottom: var(--space-3);">💬</div>
+                        <h4 class="card-title">Ongoing Support</h4>
+                    </div>
+                    <div class="card-body">
+                        Our team is here to help. Get support with booking, scheduling, or any questions you have.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Subjects Preview -->
+    <section class="section">
+        <div class="container">
+            <div class="text-center mb-8">
+                <h2>Subjects We Offer</h2>
+                <p class="text-muted">Specialized tutoring for Primary and High School learners</p>
+            </div>
+
+            <div class="grid grid-2">
+                <!-- Primary Phase -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">🌱 Primary Phase</h3>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Grades 4-7</strong></p>
+                        <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px;">
+                            <span class="badge"
+                                style="background: var(--color-bg-light-gray); padding: 4px 12px; border-radius: 20px; font-size: 0.9rem;">Mathematics</span>
+                            <span class="badge"
+                                style="background: var(--color-bg-light-gray); padding: 4px 12px; border-radius: 20px; font-size: 0.9rem;">English</span>
+                            <span class="badge"
+                                style="background: var(--color-bg-light-gray); padding: 4px 12px; border-radius: 20px; font-size: 0.9rem;">Coding</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="tutors.html?grade=4" class="btn btn-outline" style="width: 100%;">Find Primary
+                            Tutors</a>
+                    </div>
+                </div>
+
+                <!-- High School Sciences -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">🔬 Sciences & Math</h3>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Grades 8-12</strong></p>
+                        <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px;">
+                            <span class="badge"
+                                style="background: var(--color-bg-light-gray); padding: 4px 12px; border-radius: 20px; font-size: 0.9rem;">Mathematics</span>
+                            <span class="badge"
+                                style="background: var(--color-bg-light-gray); padding: 4px 12px; border-radius: 20px; font-size: 0.9rem;">Math
+                                Literacy</span>
+                            <span class="badge"
+                                style="background: var(--color-bg-light-gray); padding: 4px 12px; border-radius: 20px; font-size: 0.9rem;">Physical
+                                Science</span>
+                            <span class="badge"
+                                style="background: var(--color-bg-light-gray); padding: 4px 12px; border-radius: 20px; font-size: 0.9rem;">Life
+                                Sciences</span>
+                            <span class="badge"
+                                style="background: var(--color-bg-light-gray); padding: 4px 12px; border-radius: 20px; font-size: 0.9rem;">Natural
+                                Science</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="tutors.html?subject=mathematics" class="btn btn-outline" style="width: 100%;">Find
+                            Science Tutors</a>
+                    </div>
+                </div>
+
+                <!-- Commerce & Tech -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">💻 Commerce & Tech</h3>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Grades 8-12</strong></p>
+                        <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px;">
+                            <span class="badge"
+                                style="background: var(--color-bg-light-gray); padding: 4px 12px; border-radius: 20px; font-size: 0.9rem;">Accounting</span>
+                            <span class="badge"
+                                style="background: var(--color-bg-light-gray); padding: 4px 12px; border-radius: 20px; font-size: 0.9rem;">Economics</span>
+                            <span class="badge"
+                                style="background: var(--color-bg-light-gray); padding: 4px 12px; border-radius: 20px; font-size: 0.9rem;">Geography</span>
+                            <span class="badge"
+                                style="background: var(--color-bg-light-gray); padding: 4px 12px; border-radius: 20px; font-size: 0.9rem;">CAT</span>
+                            <span class="badge"
+                                style="background: var(--color-bg-light-gray); padding: 4px 12px; border-radius: 20px; font-size: 0.9rem;">IT</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="tutors.html?subject=accounting" class="btn btn-outline" style="width: 100%;">Find
+                            Commerce Tutors</a>
+                    </div>
+                </div>
+
+                <!-- Languages -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">🗣️ Languages</h3>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Grades 8-12</strong></p>
+                        <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px;">
+                            <span class="badge"
+                                style="background: var(--color-bg-light-gray); padding: 4px 12px; border-radius: 20px; font-size: 0.9rem;">English</span>
+                            <span class="badge"
+                                style="background: var(--color-bg-light-gray); padding: 4px 12px; border-radius: 20px; font-size: 0.9rem;">Afrikaans</span>
+                            <span class="badge"
+                                style="background: var(--color-bg-light-gray); padding: 4px 12px; border-radius: 20px; font-size: 0.9rem;">IsiZulu</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="tutors.html?subject=english" class="btn btn-outline" style="width: 100%;">Find Language
+                            Tutors</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="section" style="background-color: var(--color-bg-light-gray);">
+        <div class="container">
+            <div class="text-center mb-8">
+                <h2>Student Success Stories</h2>
+                <p class="text-muted">Real results from real students</p>
+            </div>
+
+            <div class="grid grid-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="stars mb-4" style="color: var(--color-warning);">⭐⭐⭐⭐⭐</div>
+                        <p style="font-style: italic; color: var(--color-text-secondary);">"My Math grade went from 52%
+                            to 78% in just one term! My tutor explained concepts in a way that finally made sense."</p>
+                    </div>
+                    <div class="card-footer">
+                        <strong>Thabo M.</strong><br>
+                        <span class="text-muted">Grade 11 Mathematics</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="stars mb-4" style="color: var(--color-warning);">⭐⭐⭐⭐⭐</div>
+                        <p style="font-style: italic; color: var(--color-text-secondary);">"Physical Science was my
+                            worst subject. Now it's my best! The one-on-one attention made all the difference."</p>
+                    </div>
+                    <div class="card-footer">
+                        <strong>Lerato K.</strong><br>
+                        <span class="text-muted">Grade 12 Physical Science</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="stars mb-4" style="color: var(--color-warning);">⭐⭐⭐⭐⭐</div>
+                        <p style="font-style: italic; color: var(--color-text-secondary);">"The flexible scheduling and
+                            online option meant I could get help even during exam season. Highly recommend!"</p>
+                    </div>
+                    <div class="card-footer">
+                        <strong>Sipho N.</strong><br>
+                        <span class="text-muted">Grade 10 Mathematics</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-8"
+                style="padding: var(--space-6); background: white; border-radius: var(--radius-xl); box-shadow: var(--shadow-md);">
+                <h3 style="margin-bottom: var(--space-4);">Ready to improve your results?</h3>
+                <a href="tutors.html" class="btn btn-primary btn-lg">Find Your Perfect Tutor Today</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="section">
+        <div class="container">
+            <div class="grid grid-4">
+                <div class="text-center">
+                    <h2
+                        style="color: var(--color-primary); font-size: var(--font-size-5xl); margin-bottom: var(--space-2);">
+                        500+</h2>
+                    <p class="text-muted">Verified Tutors</p>
+                </div>
+                <div class="text-center">
+                    <h2
+                        style="color: var(--color-primary); font-size: var(--font-size-5xl); margin-bottom: var(--space-2);">
+                        5,000+</h2>
+                    <p class="text-muted">Students Helped</p>
+                </div>
+                <div class="text-center">
+                    <h2
+                        style="color: var(--color-primary); font-size: var(--font-size-5xl); margin-bottom: var(--space-2);">
+                        95%</h2>
+                    <p class="text-muted">Success Rate</p>
+                </div>
+                <div class="text-center">
+                    <h2
+                        style="color: var(--color-primary); font-size: var(--font-size-5xl); margin-bottom: var(--space-2);">
+                        4.9/5</h2>
+                    <p class="text-muted">Average Rating</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                        <img src="images/Logo.png" alt="Minatty Learning Hub"
+                            style="height: 40px; width: auto; background-color: white; padding: 4px; border-radius: 6px;">
+                        <h3 style="margin: 0;">Minatty Learning Hub</h3>
+                    </div>
+                    <p>The most effective tutoring platform for all major school subjects. Helping high school students
+                        achieve their academic goals since 2020.</p>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <div class="footer-links">
+                        <a href="index.html">Home</a>
+                        <a href="subjects.html">Subjects</a>
+                        <a href="how-it-works.html">How It Works</a>
+                        <a href="tutors.html" id="footerFindTutors">Find Tutors</a>
+                        <a href="become-tutor.html" id="footerBecomeTutor">Become a Tutor</a>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <div class="footer-links">
+                        <a href="how-it-works.html#faq">FAQ</a>
+                        <a href="contact.html">Contact Us</a>
+                        <a href="admin.html">Admin</a>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Connect</h3>
+                    <div class="footer-links">
+                        <a href="#facebook">Facebook</a>
+                        <a href="https://www.tiktok.com/@Minatty10" target="_blank">TikTok</a>
+                        <a href="#instagram">Instagram</a>
+                        <a href="#linkedin">LinkedIn</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 Minatty Learning Hub. All rights reserved. | <a href="#privacy">Privacy Policy</a> | <a
+                        href="#terms">Terms of Service</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+    <script type="module" src="js/auth.js"></script>
+</body>
+
+</html>

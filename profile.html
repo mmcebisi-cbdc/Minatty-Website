@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="View tutor profile and book a lesson.">
+    <title>Tutor Profile | Minatty Learning Hub</title>
+    <link rel="icon" type="image/svg+xml" href="images/logo_white.svg">
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .profile-header {
+            background-color: var(--color-bg-light-gray);
+            padding: var(--space-8) 0;
+        }
+
+        .profile-container {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: var(--space-8);
+            margin-top: -50px;
+        }
+
+        .profile-sidebar {
+            background: white;
+            padding: var(--space-6);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+        }
+
+        .profile-image-large {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto var(--space-4);
+            border: 4px solid white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .profile-content {
+            background: white;
+            padding: var(--space-8);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-2);
+            justify-content: center;
+        }
+
+        @media (max-width: 768px) {
+            .profile-container {
+                grid-template-columns: 1fr;
+                margin-top: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header & Navigation -->
+    <header class="header" id="header">
+        <div class="container header-container">
+            <a href="index.html" class="logo">
+                <img src="images/Logo.png" alt="Minatty Learning Hub Logo" style="height: 50px; width: auto;">
+                <span style="margin-left: 12px;">Minatty Learning Hub</span>
+            </a>
+
+            <nav class="nav">
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="subjects.html" class="nav-link">Subjects</a></li>
+                    <li><a href="how-it-works.html" class="nav-link">How It Works</a></li>
+                    <li><a href="become-tutor.html" class="nav-link" id="navBecomeTutor">Become a Tutor</a></li>
+                    <li><a href="tutors.html" class="nav-link active" id="navFindTutors">Find Tutors</a></li>
+                    <li id="authButtons" class="auth-buttons-container"></li>
+                </ul>
+
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <div id="loading" style="text-align: center; padding: 100px;">
+        <div class="spinner"
+            style="border: 4px solid #f3f3f3; border-top: 4px solid var(--color-primary); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 15px;">
+        </div>
+        <p>Loading Profile...</p>
+    </div>
+
+    <div id="profileContent" style="display: none;">
+        <!-- Profile Header/Hero -->
+        <section class="profile-header">
+            <div class="container">
+                <div style="max-width: 800px;">
+                    <a href="tutors.html"
+                        style="color: var(--color-text-muted); text-decoration: none; display: flex; align-items: center; gap: 5px; margin-bottom: var(--space-4);"><i
+                            class="fas fa-arrow-left"></i> Back to Tutors</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" style="padding-top: 0;">
+            <div class="container">
+                <div class="profile-container">
+                    <!-- Sidebar -->
+                    <aside class="profile-sidebar">
+                        <div id="profileImageContainer"></div>
+                        <h2 id="profileName" style="margin-bottom: var(--space-2);"></h2>
+                        <p id="profileQualification" class="text-muted" style="margin-bottom: var(--space-4);"></p>
+
+                        <div
+                            style="margin-bottom: var(--space-6); border-top: 1px solid #eee; border-bottom: 1px solid #eee; padding: var(--space-4) 0;">
+                            <div class="stat-item">
+                                <i class="fas fa-star" style="color: var(--color-warning);"></i>
+                                <span id="profileRating"></span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-briefcase"></i>
+                                <span id="profileExperience"></span> Years Experience
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span id="profileLocation"></span>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: var(--space-6);">
+                            <h3 style="color: var(--color-primary); font-size: 2rem; margin-bottom: var(--space-1);">
+                                <span id="profileRate"></span><span
+                                    style="font-size: 1rem; color: var(--color-text-muted); font-weight: normal;">/hr</span>
+                            </h3>
+                        </div>
+
+                        <div id="actionButtons">
+                            <!-- Injected via JS -->
+                        </div>
+                    </aside>
+
+                    <!-- Main Content -->
+                    <main class="profile-content">
+                        <section style="margin-bottom: var(--space-8);">
+                            <h3 class="section-title">About Me</h3>
+                            <p id="profileBio"
+                                style="line-height: var(--line-height-relaxed); color: var(--color-text-secondary);">
+                            </p>
+                        </section>
+
+                        <section style="margin-bottom: var(--space-8);">
+                            <h3 class="section-title">Subjects</h3>
+                            <div id="profileSubjects" style="display: flex; flex-wrap: wrap; gap: var(--space-2);">
+                            </div>
+                        </section>
+
+                        <section style="margin-bottom: var(--space-8);">
+                            <h3 class="section-title">Teaching Format</h3>
+                            <div id="profileFormats" style="display: flex; gap: var(--space-4);"></div>
+                        </section>
+
+                        <section>
+                            <h3 class="section-title">Reviews (<span id="reviewCount">0</span>)</h3>
+                            <div id="reviewActionContainer" style="margin-bottom: var(--space-4);"></div>
+                            <div id="reviewsList" style="display: flex; flex-direction: column; gap: var(--space-4);">
+                                <!-- Reviews injected here -->
+                            </div>
+                        </section>
+                    </main>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                        <img src="images/Logo.png" alt="Minatty Learning Hub"
+                            style="height: 40px; width: auto; background-color: white; padding: 4px; border-radius: 6px;">
+                        <h3 style="margin: 0;">Minatty Learning Hub</h3>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <div class="footer-links">
+                        <a href="index.html">Home</a>
+                        <a href="tutors.html">Find Tutors</a>
+                        <a href="become-tutor.html">Become a Tutor</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Minatty Learning Hub. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+    <script type="module" src="js/auth.js"></script>
+    <script type="module" src="js/tutors.js"></script> <!-- Reusing tutors.js for Booking/Review Modals -->
+    <script src="js/profile.js"></script>
+</body>
+
+</html>

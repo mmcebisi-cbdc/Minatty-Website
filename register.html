@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account - Minatty Learning Hub</title>
+    <link rel="icon" type="image/svg+xml" href="images/logo_white.svg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            min-height: 100vh;
+            background: #0f172a;
+            overflow-x: hidden;
+        }
+
+        #bg-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .page-wrap {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px 16px 36px;
+        }
+
+        /* In-card logo */
+        .card-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .card-logo img {
+            height: 44px;
+            width: auto;
+        }
+
+        .card-logo span {
+            color: white;
+            font-size: 1.15rem;
+            font-weight: 800;
+            letter-spacing: -0.4px;
+        }
+
+        /* Card */
+        .auth-card {
+            width: 100%;
+            max-width: 520px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 22px;
+            padding: 38px 34px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.12);
+        }
+
+        .auth-card-title {
+            display: none;
+        }
+
+        .auth-card-sub {
+            color: rgba(255, 255, 255, 0.5);
+            text-align: center;
+            font-size: 0.9rem;
+            margin-bottom: 22px;
+        }
+
+        /* Role picker */
+        .role-picker {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .role-option {
+            flex: 1;
+            padding: 15px 10px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 13px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+            color: rgba(255, 255, 255, 0.45);
+        }
+
+        .role-option:hover {
+            border-color: rgba(13, 148, 136, 0.5);
+            background: rgba(13, 148, 136, 0.08);
+            color: white;
+        }
+
+        .role-option.selected {
+            border-color: #0d9488;
+            background: rgba(13, 148, 136, 0.15);
+            color: white;
+            box-shadow: 0 0 18px rgba(13, 148, 136, 0.2);
+        }
+
+        .role-option i {
+            display: block;
+            font-size: 1.4rem;
+            margin-bottom: 5px;
+        }
+
+        .role-option span {
+            font-size: 0.88rem;
+            font-weight: 600;
+        }
+
+        /* Google btn */
+        .btn-google {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 13px;
+            background: white;
+            color: #1e293b;
+            border: none;
+            border-radius: 11px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
+        }
+
+        .btn-google:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 22px rgba(0, 0, 0, 0.35);
+        }
+
+        .btn-google img {
+            width: 20px;
+            height: 20px;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 18px 0;
+            color: rgba(255, 255, 255, 0.28);
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 13px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .form-label {
+            display: block;
+            color: rgba(255, 255, 255, 0.72);
+            font-size: 0.82rem;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 11px 14px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1.5px solid rgba(255, 255, 255, 0.11);
+            border-radius: 10px;
+            color: white;
+            font-size: 0.93rem;
+            outline: none;
+            transition: border-color 0.2s, background 0.2s;
+            font-family: inherit;
+        }
+
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.26);
+        }
+
+        .form-control:focus {
+            border-color: #0d9488;
+            background: rgba(13, 148, 136, 0.08);
+            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.18);
+        }
+
+        .form-control option {
+            background: #0f172a;
+            color: white;
+        }
+
+        /* Submit — site colors */
+        .btn-submit {
+            width: 100%;
+            margin-top: 8px;
+            padding: 13px;
+            background: linear-gradient(135deg, #0f172a 0%, #0d9488 100%);
+            color: white;
+            border: none;
+            border-radius: 11px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+            box-shadow: 0 4px 18px rgba(13, 148, 136, 0.35);
+            font-family: inherit;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(13, 148, 136, 0.45);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Messages */
+        .error-msg {
+            background: rgba(244, 63, 94, 0.13);
+            border: 1px solid rgba(244, 63, 94, 0.33);
+            color: #fda4af;
+            border-radius: 9px;
+            padding: 10px 13px;
+            font-size: 0.87rem;
+            margin-bottom: 14px;
+            display: none;
+        }
+
+        .success-msg {
+            background: rgba(16, 185, 129, 0.13);
+            border: 1px solid rgba(16, 185, 129, 0.33);
+            color: #6ee7b7;
+            border-radius: 9px;
+            padding: 10px 13px;
+            font-size: 0.87rem;
+            margin-bottom: 14px;
+            text-align: center;
+            display: none;
+        }
+
+        .auth-footer {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.85rem;
+            margin-top: 18px;
+        }
+
+        .auth-footer a {
+            color: #2dd4bf;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 540px) {
+            .auth-card {
+                padding: 26px 18px;
+                border-radius: 18px;
+            }
+
+            .auth-card-title {
+                font-size: 1.4rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="bg-canvas"></canvas>
+
+    <div class="page-wrap">
+        <div class="auth-card">
+            <div class="card-logo">
+                <span>Minatty Learning Hub</span>
+            </div>
+            <h1 class="auth-card-title">Join Minatty</h1>
+            <p class="auth-card-sub">Create your free account and start learning</p>
+
+            <div id="errorMsg" class="error-msg"></div>
+            <div id="successMsg" class="success-msg"></div>
+
+            <button class="btn-google" id="googleBtn" type="button">
+                <img src="images/Logo.png" alt="Minatty" style="height:20px;width:auto;">
+                Continue with Google
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+            </button>
+
+            <div class="divider">or create account with email</div>
+
+            <!-- Role picker -->
+            <div class="role-picker" id="rolePicker">
+                <div class="role-option selected" id="roleStudent" onclick="selectRole('student')">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Student</span>
+                </div>
+                <div class="role-option" id="roleTutor" onclick="selectRole('tutor')">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <span>Tutor</span>
+                </div>
+            </div>
+
+            <form id="registerForm" autocomplete="on" novalidate>
+                <input type="hidden" id="role" value="student">
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" id="name" class="form-control" required autocomplete="name"
+                            placeholder="Jane Doe">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" id="email" class="form-control" required autocomplete="email"
+                            placeholder="you@example.com">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="password" class="form-control" required autocomplete="new-password"
+                        placeholder="At least 6 characters">
+                </div>
+
+                <!-- Student fields -->
+                <div id="studentFields">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Grade</label>
+                            <select id="grade" class="form-control">
+                                <option value="4">Grade 4</option>
+                                <option value="5">Grade 5</option>
+                                <option value="6">Grade 6</option>
+                                <option value="7">Grade 7</option>
+                                <option value="8">Grade 8</option>
+                                <option value="9">Grade 9</option>
+                                <option value="10">Grade 10</option>
+                                <option value="11">Grade 11</option>
+                                <option value="12" selected>Grade 12</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Your Phone</label>
+                            <input type="tel" id="studentPhone" class="form-control" placeholder="082 123 4567"
+                                autocomplete="tel">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Parent/Guardian Phone</label>
+                        <input type="tel" id="parentPhone" class="form-control" placeholder="082 123 4567"
+                            autocomplete="tel">
+                    </div>
+                </div>
+
+                <!-- Tutor fields -->
+                <div id="tutorFields" style="display:none;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Highest Qualification</label>
+                            <select id="qualification" class="form-control">
+                                <option value="currently-studying">Currently Studying</option>
+                                <option value="bachelors">Bachelor's Degree</option>
+                                <option value="honours">Honours Degree</option>
+                                <option value="masters">Master's Degree</option>
+                                <option value="phd">PhD</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Hourly Rate (R)</label>
+                            <input type="number" id="hourlyRate" class="form-control" min="100" max="500" value="150">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Phone Number</label>
+                        <input type="tel" id="phone" class="form-control" placeholder="082 123 4567" autocomplete="tel">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit" id="submitBtn">
+                    <i class="fas fa-user-plus" style="margin-right:6px;"></i> Create Account
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                Already have an account? <a href="login.html">Sign in</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3D Background -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+    <script>
+        (function () {
+            const canvas = document.getElementById('bg-canvas');
+            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+            renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+            renderer.setSize(innerWidth, innerHeight);
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, 0.1, 200);
+            camera.position.set(0, 0, 30);
+
+            const colors = [0x0d9488, 0x0f172a, 0x0f766e, 0x334155, 0x2dd4bf, 0x475569, 0x1e293b];
+            const shapes = [];
+            for (let i = 0; i < 16; i++) {
+                const r = 0.5 + Math.random() * 3;
+                const geo = new THREE.IcosahedronGeometry(r, 0);
+                const mat = new THREE.MeshPhongMaterial({
+                    color: colors[i % colors.length], wireframe: Math.random() > 0.45,
+                    transparent: true, opacity: 0.1 + Math.random() * 0.22, shininess: 80
+                });
+                const m = new THREE.Mesh(geo, mat);
+                m.position.set((Math.random() - 0.5) * 58, (Math.random() - 0.5) * 45, (Math.random() - 0.5) * 28 - 5);
+                m.userData = { rx: (Math.random() - 0.5) * 0.011, ry: (Math.random() - 0.5) * 0.009, vx: (Math.random() - 0.5) * 0.012, vy: (Math.random() - 0.5) * 0.012 };
+                scene.add(m); shapes.push(m);
+            }
+            const pc = 350; const pp = new Float32Array(pc * 3); const pv = [];
+            for (let i = 0; i < pc; i++) { pp[i * 3] = (Math.random() - 0.5) * 88; pp[i * 3 + 1] = (Math.random() - 0.5) * 66; pp[i * 3 + 2] = (Math.random() - 0.5) * 40; pv.push((Math.random() - 0.5) * 0.007, (Math.random() - 0.5) * 0.007, 0); }
+            const pGeo = new THREE.BufferGeometry();
+            pGeo.setAttribute('position', new THREE.BufferAttribute(pp, 3));
+            scene.add(new THREE.Points(pGeo, new THREE.PointsMaterial({ color: 0x2dd4bf, size: 0.2, transparent: true, opacity: 0.45 })));
+            scene.add(new THREE.AmbientLight(0xffffff, 0.35));
+            const p1 = new THREE.PointLight(0x0d9488, 2.5, 90); p1.position.set(-18, 18, 10); scene.add(p1);
+            const p2 = new THREE.PointLight(0x2dd4bf, 1.8, 90); p2.position.set(18, -14, 5); scene.add(p2);
+            let mx = 0, my = 0;
+            window.addEventListener('mousemove', e => { mx = (e.clientX / innerWidth - 0.5) * 0.7; my = (e.clientY / innerHeight - 0.5) * 0.7; });
+            let t = 0;
+            function animate() {
+                requestAnimationFrame(animate); t += 0.004;
+                shapes.forEach(s => { s.rotation.x += s.userData.rx; s.rotation.y += s.userData.ry; s.position.x += s.userData.vx; s.position.y += s.userData.vy; if (Math.abs(s.position.x) > 32) s.userData.vx *= -1; if (Math.abs(s.position.y) > 26) s.userData.vy *= -1; });
+                const p = pGeo.attributes.position.array;
+                for (let i = 0; i < pc; i++) { p[i * 3] += pv[i * 3]; p[i * 3 + 1] += pv[i * 3 + 1]; if (Math.abs(p[i * 3]) > 46) pv[i * 3] *= -1; if (Math.abs(p[i * 3 + 1]) > 35) pv[i * 3 + 1] *= -1; }
+                pGeo.attributes.position.needsUpdate = true;
+                camera.position.x += (mx - camera.position.x) * 0.04;
+                camera.position.y += (-my - camera.position.y) * 0.04;
+                camera.lookAt(0, 0, 0);
+                renderer.render(scene, camera);
+            }
+            animate();
+            window.addEventListener('resize', () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); });
+        })();
+    </script>
+
+    <!-- Role toggle (plain script, no auth dependency) -->
+    <script>
+        function selectRole(role) {
+            document.getElementById('role').value = role;
+            document.getElementById('roleStudent').classList.toggle('selected', role === 'student');
+            document.getElementById('roleTutor').classList.toggle('selected', role === 'tutor');
+            document.getElementById('studentFields').style.display = role === 'student' ? 'block' : 'none';
+            document.getElementById('tutorFields').style.display = role === 'tutor' ? 'block' : 'none';
+        }
+    </script>
+
+    <!-- ALL auth logic in a module script -->
+    <script type="module">
+        import auth from './js/auth.js';
+
+        // Hide Google button since OAuth requires InsForge
+        const googleBtn = document.getElementById('googleBtn');
+        if (googleBtn) googleBtn.style.display = 'none';
+
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const role = document.getElementById('role').value;
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('errorMsg');
+            const successDiv = document.getElementById('successMsg');
+            const btn = document.getElementById('submitBtn');
+
+            errorDiv.style.display = 'none';
+            successDiv.style.display = 'none';
+
+            // Basic validation
+            if (!name) { errorDiv.textContent = 'Please enter your full name.'; errorDiv.style.display = 'block'; return; }
+            if (!email) { errorDiv.textContent = 'Please enter your email address.'; errorDiv.style.display = 'block'; return; }
+            if (password.length < 6) { errorDiv.textContent = 'Password must be at least 6 characters.'; errorDiv.style.display = 'block'; return; }
+
+            const userData = { name, email, password, role };
+
+            if (role === 'student') {
+                const sPhone = document.getElementById('studentPhone').value.trim();
+                const pPhone = document.getElementById('parentPhone').value.trim();
+                if (!sPhone) { errorDiv.textContent = 'Please enter your phone number.'; errorDiv.style.display = 'block'; return; }
+                if (!pPhone) { errorDiv.textContent = 'Please enter a parent/guardian phone number.'; errorDiv.style.display = 'block'; return; }
+                userData.grade = document.getElementById('grade').value;
+                userData.phone = sPhone;
+                userData.parentGuardianNumber = pPhone;
+            } else {
+                userData.qualification = document.getElementById('qualification').value;
+                userData.hourlyRate = document.getElementById('hourlyRate').value;
+                userData.phone = document.getElementById('phone').value.trim() || '';
+            }
+
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right:6px;"></i> Creating account…';
+            btn.disabled = true;
+
+            const result = await auth.register(userData);
+
+            if (result.success) {
+                document.getElementById('registerForm').reset();
+                document.getElementById('role').value = 'student';
+                selectRole('student');
+
+                successDiv.textContent = '✓ Account created successfully! Redirecting…';
+                successDiv.style.display = 'block';
+
+                setTimeout(() => { window.location.href = 'index.html'; }, 900);
+            } else {
+                errorDiv.textContent = result.error || 'Registration failed. Please try again.';
+                errorDiv.style.display = 'block';
+                btn.innerHTML = '<i class="fas fa-user-plus" style="margin-right:6px;"></i> Create Account';
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+
+</html>

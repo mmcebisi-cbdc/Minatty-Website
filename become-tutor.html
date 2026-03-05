@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Become a tutor with Minatty Learning Hub. Share your expertise in Math and Physical Science, set your own hours, and earn competitive pay.">
+    <title>Become a Tutor - Join Our Community | Minatty Learning Hub</title>
+    <link rel="icon" type="image/svg+xml" href="images/logo_white.svg">
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <!-- Auth Guard -->
+    <script>
+        // Check local storage directly for immediate redirect before page renders
+        if (!localStorage.getItem('user')) {
+            window.location.href = 'login.html';
+        }
+    </script>
+
+    <!-- Header & Navigation -->
+    <header class="header" id="header">
+        <div class="container header-container">
+            <a href="index.html" class="logo">
+                <img src="images/Logo.png" alt="Minatty Learning Hub Logo" style="height: 50px; width: auto;">
+                <span style="margin-left: 12px;">Minatty Learning Hub</span>
+            </a>
+
+            <nav class="nav">
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="subjects.html" class="nav-link">Subjects</a></li>
+                    <li><a href="how-it-works.html" class="nav-link">How It Works</a></li>
+                    <li><a href="become-tutor.html" class="nav-link active" id="navBecomeTutor">Become a Tutor</a></li>
+                    <li><a href="tutors.html" class="nav-link" id="navFindTutors">Find Tutors</a></li>
+                    <li id="authButtons" class="auth-buttons-container"></li>
+                </ul>
+
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero"
+        style="background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('images/modern_classroom_mathematics_1769987402702.png') no-repeat center center/cover; color: white;">
+        <div class="container">
+            <div class="hero-content" style="grid-template-columns: 1fr; text-align: center;">
+                <div class="hero-text" style="margin: 0 auto; max-width: 800px;">
+                    <h1 style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">Become a Tutor</h1>
+                    <p style="color: #f0f0f0; font-size: 1.2rem; margin-bottom: 2rem;">Share your expertise in School
+                        Subjects. Help students succeed while building a
+                        rewarding career with flexible hours and competitive pay.</p>
+
+                    <div class="hero-cta" style="justify-content: center;">
+                        <a href="#application" class="btn btn-primary btn-lg">Apply to Teach</a>
+                        <a href="#requirements" class="btn btn-outline btn-lg"
+                            style="border-color: white; color: white;">See Requirements</a>
+                    </div>
+
+                    <div class="trust-indicators" style="justify-content: center; margin-top: 3rem;">
+                        <div class="trust-badge"
+                            style="background: rgba(255,255,255,0.15); backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2); color: white;">
+                            <span>💰</span>
+                            <span>Earn R150-R400/hour</span>
+                        </div>
+                        <div class="trust-badge"
+                            style="background: rgba(255,255,255,0.15); backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2); color: white;">
+                            <span>⏰</span>
+                            <span>Flexible Schedule</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="section" style="background-color: var(--color-bg-light-gray);">
+        <div class="container">
+            <div class="text-center mb-8">
+                <h2>Why Tutor with Minatty Learning Hub?</h2>
+                <p class="text-muted">Join hundreds of successful tutors on our platform</p>
+            </div>
+
+            <div class="grid grid-3">
+                <div class="card text-center">
+                    <div style="font-size: 3rem; margin-bottom: var(--space-4);">💵</div>
+                    <h4 class="card-title">Competitive Pay</h4>
+                    <p class="card-body">Set your own hourly rate and earn R150-R400 per hour based on your
+                        qualifications and experience. Get paid weekly.</p>
+                </div>
+
+                <div class="card text-center">
+                    <div style="font-size: 3rem; margin-bottom: var(--space-4);">📅</div>
+                    <h4 class="card-title">Flexible Hours</h4>
+                    <p class="card-body">Choose when you work. Set your own availability and teach as many or as few
+                        hours as you want.</p>
+                </div>
+
+                <div class="card text-center">
+                    <div style="font-size: 3rem; margin-bottom: var(--space-4);">🌐</div>
+                    <h4 class="card-title">Online or In-Person</h4>
+                    <p class="card-body">Teach from anywhere with online lessons or meet students locally. You choose
+                        what works best for you.</p>
+                </div>
+
+                <div class="card text-center">
+                    <div style="font-size: 3rem; margin-bottom: var(--space-4);">🎯</div>
+                    <h4 class="card-title">Matched Students</h4>
+                    <p class="card-body">We connect you with students who need help in your areas of expertise. No more
+                        searching for clients.</p>
+                </div>
+
+                <div class="card text-center">
+                    <div style="font-size: 3rem; margin-bottom: var(--space-4);">🛡️</div>
+                    <h4 class="card-title">Platform Support</h4>
+                    <p class="card-body">Access our support team, payment protection, and resources to help you succeed
+                        as a tutor.</p>
+                </div>
+
+                <div class="card text-center">
+                    <div style="font-size: 3rem; margin-bottom: var(--space-4);">📈</div>
+                    <h4 class="card-title">Grow Your Career</h4>
+                    <p class="card-body">Build your reputation with reviews, expand your student base, and develop
+                        professionally.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Requirements Section -->
+    <section class="section" id="requirements">
+        <div class="container">
+            <div class="text-center mb-8">
+                <h2>Requirements to Become a Tutor</h2>
+                <p class="text-muted">We maintain high standards to ensure quality education for our students</p>
+            </div>
+
+            <div style="max-width: 1000px; margin: 0 auto;">
+                <div class="grid grid-2">
+                    <div class="card">
+                        <h4 class="card-title">📚 Academic Qualifications</h4>
+                        <ul style="list-style: none; margin-top: var(--space-4);">
+                            <li
+                                style="padding: var(--space-2) 0; display: flex; align-items: start; gap: var(--space-3);">
+                                <span style="color: var(--color-success);">✓</span>
+                                <span>University degree or currently enrolled in relevant field</span>
+                            </li>
+                            <li
+                                style="padding: var(--space-2) 0; display: flex; align-items: start; gap: var(--space-3);">
+                                <span style="color: var(--color-success);">✓</span>
+                                <span>Strong academic record in Math or Physical Science</span>
+                            </li>
+                            <li
+                                style="padding: var(--space-2) 0; display: flex; align-items: start; gap: var(--space-3);">
+                                <span style="color: var(--color-success);">✓</span>
+                                <span>Teaching certification (preferred but not required)</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <h4 class="card-title">🎓 Subject Expertise</h4>
+                        <ul style="list-style: none; margin-top: var(--space-4);">
+                            <li
+                                style="padding: var(--space-2) 0; display: flex; align-items: start; gap: var(--space-3);">
+                                <span style="color: var(--color-success);">✓</span>
+                                <span>Primary Phase (Grades 4-7): English, Math, Coding</span>
+                            </li>
+                            <li
+                                style="padding: var(--space-2) 0; display: flex; align-items: start; gap: var(--space-3);">
+                                <span style="color: var(--color-success);">✓</span>
+                                <span>High School (Grades 8-12): All Major Subjects</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <h4 class="card-title">👤 Personal Requirements</h4>
+                        <ul style="list-style: none; margin-top: var(--space-4);">
+                            <li
+                                style="padding: var(--space-2) 0; display: flex; align-items: start; gap: var(--space-3);">
+                                <span style="color: var(--color-success);">✓</span>
+                                <span>Excellent communication skills</span>
+                            </li>
+                            <li
+                                style="padding: var(--space-2) 0; display: flex; align-items: start; gap: var(--space-3);">
+                                <span style="color: var(--color-success);">✓</span>
+                                <span>Passion for teaching and helping students</span>
+                            </li>
+                            <li
+                                style="padding: var(--space-2) 0; display: flex; align-items: start; gap: var(--space-3);">
+                                <span style="color: var(--color-success);">✓</span>
+                                <span>Reliable and professional demeanor</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <h4 class="card-title">🔐 Verification</h4>
+                        <ul style="list-style: none; margin-top: var(--space-4);">
+                            <li
+                                style="padding: var(--space-2) 0; display: flex; align-items: start; gap: var(--space-3);">
+                                <span style="color: var(--color-success);">✓</span>
+                                <span>Valid ID for identity verification</span>
+                            </li>
+                            <li
+                                style="padding: var(--space-2) 0; display: flex; align-items: start; gap: var(--space-3);">
+                                <span style="color: var(--color-success);">✓</span>
+                                <span>Clean background check</span>
+                            </li>
+                            <li
+                                style="padding: var(--space-2) 0; display: flex; align-items: start; gap: var(--space-3);">
+                                <span style="color: var(--color-success);">✓</span>
+                                <span>Verified academic credentials</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Application Process -->
+    <section class="section" style="background-color: var(--color-bg-light-gray);">
+        <div class="container">
+            <div class="text-center mb-8">
+                <h2>Application Process</h2>
+                <p class="text-muted">Follow these 6 steps to join our tutor community</p>
+            </div>
+
+            <div style="max-width: 900px; margin: 0 auto;">
+                <div class="card mb-4">
+                    <div style="display: flex; align-items: start; gap: var(--space-5);">
+                        <div
+                            style="flex-shrink: 0; width: 60px; height: 60px; background: var(--color-primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold);">
+                            1</div>
+                        <div>
+                            <h4 style="margin-bottom: var(--space-2);">Online Application</h4>
+                            <p class="text-muted" style="margin-bottom: 0;">Complete our online application form with
+                                your personal information, education background, and teaching experience. This takes
+                                about 10-15 minutes.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div style="display: flex; align-items: start; gap: var(--space-5);">
+                        <div
+                            style="flex-shrink: 0; width: 60px; height: 60px; background: var(--color-primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold);">
+                            2</div>
+                        <div>
+                            <h4 style="margin-bottom: var(--space-2);">Upload Qualifications</h4>
+                            <p class="text-muted" style="margin-bottom: 0;">Submit copies of your academic
+                                qualifications, teaching certificates (if applicable), and any relevant credentials.
+                                Accepted formats: PDF, JPG, PNG.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div style="display: flex; align-items: start; gap: var(--space-5);">
+                        <div
+                            style="flex-shrink: 0; width: 60px; height: 60px; background: var(--color-primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold);">
+                            3</div>
+                        <div>
+                            <h4 style="margin-bottom: var(--space-2);">Identity Verification</h4>
+                            <p class="text-muted" style="margin-bottom: 0;">Verify your identity by uploading a valid
+                                government-issued ID. This ensures safety and trust on our platform for all users.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div style="display: flex; align-items: start; gap: var(--space-5);">
+                        <div
+                            style="flex-shrink: 0; width: 60px; height: 60px; background: var(--color-primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold);">
+                            4</div>
+                        <div>
+                            <h4 style="margin-bottom: var(--space-2);">Background Check</h4>
+                            <p class="text-muted" style="margin-bottom: 0;">We conduct a thorough background check to
+                                ensure the safety of our students. This process typically takes 3-5 business days.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div style="display: flex; align-items: start; gap: var(--space-5);">
+                        <div
+                            style="flex-shrink: 0; width: 60px; height: 60px; background: var(--color-primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold);">
+                            5</div>
+                        <div>
+                            <h4 style="margin-bottom: var(--space-2);">Interview & Screening</h4>
+                            <p class="text-muted" style="margin-bottom: 0;">Participate in a brief online interview with
+                                our team. We'll discuss your teaching experience, methodology, and answer any questions
+                                you have about the platform.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="border: 2px solid var(--color-success);">
+                    <div style="display: flex; align-items: start; gap: var(--space-5);">
+                        <div
+                            style="flex-shrink: 0; width: 60px; height: 60px; background: var(--color-success); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold);">
+                            6</div>
+                        <div>
+                            <h4 style="margin-bottom: var(--space-2);">Approval & Onboarding</h4>
+                            <p class="text-muted" style="margin-bottom: 0;">Once approved, you'll receive onboarding
+                                materials, platform training, and can start creating your profile. Welcome to the
+                                Minatty Learning Hub family!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Payment Structure -->
+    <section class="section">
+        <div class="container">
+            <div class="text-center mb-8">
+                <h2>How Tutors Get Paid</h2>
+                <p class="text-muted">Transparent, fair, and reliable payment structure</p>
+            </div>
+
+            <div class="grid grid-3">
+                <div class="card text-center">
+                    <div style="font-size: 3rem; margin-bottom: var(--space-4);">💲</div>
+                    <h4 class="card-title">Set Your Rate</h4>
+                    <p class="card-body">Choose your hourly rate based on your qualifications and experience. Typical
+                        range: R150-R400/hour.</p>
+                </div>
+
+                <div class="card text-center">
+                    <div style="font-size: 3rem; margin-bottom: var(--space-4);">📊</div>
+                    <h4 class="card-title">Platform Fee</h4>
+                    <p class="card-body">We charge a platform fee (25%) to cover payment processing, support, and
+                        platform maintenance.</p>
+                </div>
+
+                <div class="card text-center">
+                    <div style="font-size: 3rem; margin-bottom: var(--space-4);">🔍</div>
+                    <h4 class="card-title">Background Check Fee</h4>
+                    <p class="card-body">A 10% fee is applied to cover the cost of thorough tutor background checks,
+                        ensuring a safe and trusted platform for all students.</p>
+                </div>
+
+                <div class="card text-center">
+                    <div style="font-size: 3rem; margin-bottom: var(--space-4);">⏱️</div>
+                    <h4 class="card-title">Weekly Payments</h4>
+                    <p class="card-body">Get paid weekly via bank transfer. Fast, secure, and reliable payment
+                        processing every Friday.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Application Form -->
+    <section class="section" style="background-color: var(--color-bg-light-gray);" id="application">
+        <div class="container">
+            <div class="text-center mb-8">
+                <h2>Apply to Become a Tutor</h2>
+                <p class="text-muted">Start your journey as a Minatty Learning Hub tutor today</p>
+            </div>
+
+            <div
+                style="max-width: 700px; margin: 0 auto; background: white; padding: var(--space-8); border-radius: var(--radius-2xl); box-shadow: var(--shadow-xl);">
+                <form id="tutorApplicationForm">
+                    <div class="form-group">
+                        <label class="form-label">Full Name *</label>
+                        <input type="text" id="fullName" class="form-input" required placeholder="Enter your full name"
+                            autocomplete="name">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Email Address *</label>
+                        <input type="email" id="email" class="form-input" required placeholder="your.email@example.com"
+                            autocomplete="email">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Profile Photo *</label>
+                        <input type="file" id="profileImage" class="form-input" required
+                            accept="image/png, image/jpeg, image/webp" autocomplete="off">
+                        <small class="text-muted">Please upload a professional photo (JPG, PNG, WebP). Max 5MB.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Phone Number *</label>
+                        <input type="tel" id="phone" class="form-input" required placeholder="+27 XX XXX XXXX"
+                            autocomplete="tel">
+                    </div>
+
+                    <div class="form-group">
+                        <select id="qualification" class="form-select" required autocomplete="off">
+                            <option value="">Select your qualification</option>
+                            <option value="bachelors">Bachelor's Degree</option>
+                            <option value="honours">Honours Degree</option>
+                            <option value="masters">Master's Degree</option>
+                            <option value="phd">PhD</option>
+                            <option value="teaching-cert">Teaching Certificate</option>
+                            <option value="currently-studying">Currently Studying</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Upload Qualifications (PDF/Image) *</label>
+                        <input type="file" id="qualificationsDoc" class="form-input" required
+                            accept="image/png, image/jpeg, image/webp, application/pdf" autocomplete="off">
+                        <small class="text-muted">Degree, Transcript, or Certificate.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Upload Identity Document (PDF/Image) *</label>
+                        <input type="file" id="identityDoc" class="form-input" required
+                            accept="image/png, image/jpeg, image/webp, application/pdf" autocomplete="off">
+                        <small class="text-muted">ID Copy, Passport, or Driver's License.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Subjects You Can Teach * (Select all that apply)</label>
+
+                        <div class="custom-dropdown" id="subjectDropdown">
+                            <div class="dropdown-trigger" tabindex="0">Select subjects...</div>
+                            <div class="dropdown-content">
+                                <!-- Primary Phase -->
+                                <div class="dropdown-section-title">Primary Phase (Grades 4-7)</div>
+                                <label class="dropdown-item">
+                                    <input type="checkbox" name="subjects" value="english-primary"> English
+                                </label>
+                                <label class="dropdown-item">
+                                    <input type="checkbox" name="subjects" value="mathematics-primary"> Mathematics
+                                </label>
+                                <label class="dropdown-item">
+                                    <input type="checkbox" name="subjects" value="coding-primary"> Coding
+                                </label>
+
+                                <!-- High School Phase -->
+                                <div class="dropdown-section-title">High School (Grades 8-12)</div>
+                                <label class="dropdown-item">
+                                    <input type="checkbox" name="subjects" value="english-hs"> English
+                                </label>
+                                <label class="dropdown-item">
+                                    <input type="checkbox" name="subjects" value="afrikaans-hs"> Afrikaans
+                                </label>
+                                <label class="dropdown-item">
+                                    <input type="checkbox" name="subjects" value="mathematics-hs"> Mathematics
+                                </label>
+                                <label class="dropdown-item">
+                                    <input type="checkbox" name="subjects" value="math-lit-hs"> Math Literacy
+                                </label>
+                                <label class="dropdown-item">
+                                    <input type="checkbox" name="subjects" value="physical-science-hs"> Physical Science
+                                </label>
+                                <label class="dropdown-item">
+                                    <input type="checkbox" name="subjects" value="natural-science-hs"> Natural Science
+                                </label>
+                                <label class="dropdown-item">
+                                    <input type="checkbox" name="subjects" value="life-sciences-hs"> Life Sciences
+                                </label>
+                                <label class="dropdown-item">
+                                    <input type="checkbox" name="subjects" value="accounting-hs"> Accounting
+                                </label>
+                                <label class="dropdown-item">
+                                    <input type="checkbox" name="subjects" value="geography-hs"> Geography
+                                </label>
+                                <label class="dropdown-item">
+                                    <input type="checkbox" name="subjects" value="economics-hs"> Economics
+                                </label>
+                                <label class="dropdown-item">
+                                    <input type="checkbox" name="subjects" value="cat-hs"> CAT
+                                </label>
+                                <label class="dropdown-item">
+                                    <input type="checkbox" name="subjects" value="it-hs"> Information Technology
+                                </label>
+                                <label class="dropdown-item">
+                                    <input type="checkbox" name="subjects" value="isizulu-hs"> IsiZulu
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Years of Teaching Experience *</label>
+                        <select id="experience" class="form-select" required autocomplete="off">
+                            <option value="">Select experience level</option>
+                            <option value="0-1">Less than 1 year</option>
+                            <option value="1-3">1-3 years</option>
+                            <option value="3-5">3-5 years</option>
+                            <option value="5+">5+ years</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Relevant Work Experience</label>
+                        <textarea id="workExperience" class="form-textarea"
+                            placeholder="Briefly describe your relevant teaching or tutoring experience..."
+                            autocomplete="off"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Preferred Hourly Rate (ZAR) *</label>
+                        <input type="number" id="preferredRate" class="form-input" required placeholder="e.g., 250"
+                            min="100" max="500" autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">City/Location *</label>
+                        <input type="text" id="location" class="form-input" required placeholder="e.g., Johannesburg"
+                            autocomplete="address-level2">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Teaching Format *</label>
+                        <div
+                            style="display: flex; flex-direction: column; gap: var(--space-2); margin-top: var(--space-2);">
+                            <label style="display: flex; align-items: center; gap: var(--space-2); cursor: pointer;">
+                                <input type="checkbox" name="format" value="online">
+                                <span>Online Tutoring</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: var(--space-2); cursor: pointer;">
+                                <input type="checkbox" name="format" value="in-person">
+                                <span>In-Person Tutoring</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Tell Us About Yourself *</label>
+                        <textarea id="bio" class="form-textarea" required
+                            placeholder="Share your teaching philosophy, experience with students, and what makes you a great tutor..."
+                            autocomplete="off"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">Submit Application
+                        →</button>
+
+                    <p class="text-muted text-center mt-4" style="font-size: var(--font-size-sm);">
+                        By submitting this application, you agree to our terms and conditions and consent to background
+                        verification.
+                    </p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials from Tutors -->
+    <section class="section">
+        <div class="container">
+            <div class="text-center mb-8">
+                <h2>What Our Tutors Say</h2>
+                <p class="text-muted">Hear from tutors thriving on our platform</p>
+            </div>
+
+            <div class="grid grid-3">
+                <div class="card">
+                    <div class="stars mb-4" style="color: var(--color-warning);">⭐⭐⭐⭐⭐</div>
+                    <p style="font-style: italic; color: var(--color-text-secondary);">"Minatty Learning Hub has been
+                        amazing! I
+                        set my own hours, work from home, and the students are fantastic. Best decision I made."</p>
+                    <div class="card-footer">
+                        <strong>Dr. Sarah M.</strong><br>
+                        <span class="text-muted">Mathematics Tutor, 4 years</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="stars mb-4" style="color: var(--color-warning);">⭐⭐⭐⭐⭐</div>
+                    <p style="font-style: italic; color: var(--color-text-secondary);">"The platform is so easy to use
+                        and the support team is always there to help. I've built a great student base in just 6 months."
+                    </p>
+                    <div class="card-footer">
+                        <strong>John K.</strong><br>
+                        <span class="text-muted">Physical Science Tutor, 2 years</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="stars mb-4" style="color: var(--color-warning);">⭐⭐⭐⭐⭐</div>
+                    <p style="font-style: italic; color: var(--color-text-secondary);">"I love seeing my students
+                        improve! The payment system is reliable, and I have complete flexibility with my schedule."</p>
+                    <div class="card-footer">
+                        <strong>Nomsa P.</strong><br>
+                        <span class="text-muted">Mathematics Tutor, 3 years</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                        <img src="images/Logo.png" alt="Minatty Learning Hub"
+                            style="height: 40px; width: auto; background-color: white; padding: 4px; border-radius: 6px;">
+                        <h3 style="margin: 0;">Minatty Learning Hub</h3>
+                    </div>
+                    <p>The most effective tutoring platform for all major school subjects. Helping high school students
+                        achieve their academic goals since 2020.</p>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <div class="footer-links">
+                        <a href="index.html">Home</a>
+                        <a href="subjects.html">Subjects</a>
+                        <a href="how-it-works.html">How It Works</a>
+                        <a href="tutors.html" id="footerFindTutors">Find Tutors</a>
+                        <a href="become-tutor.html" id="footerBecomeTutor">Become a Tutor</a>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <div class="footer-links">
+                        <a href="how-it-works.html#faq">FAQ</a>
+                        <a href="contact.html">Contact Us</a>
+                        <a href="admin.html">Admin</a>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Connect</h3>
+                    <div class="footer-links">
+                        <a href="#facebook">Facebook</a>
+                        <a href="https://www.tiktok.com/@Minatty10" target="_blank">TikTok</a>
+                        <a href="#instagram">Instagram</a>
+                        <a href="#linkedin">LinkedIn</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 Minatty Learning Hub. All rights reserved. | <a href="#privacy">Privacy Policy</a> | <a
+                        href="#terms">Terms of Service</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="js/auth.js"></script>
+    <script type="module" src="js/prefill.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>

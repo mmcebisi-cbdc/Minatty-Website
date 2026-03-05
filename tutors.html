@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Find verified Math and Physical Science tutors. Browse profiles, read reviews, and book your perfect tutor today.">
+    <title>Find Tutors - Math & Physical Science Tutoring | Minatty Learning Hub</title>
+    <link rel="icon" type="image/svg+xml" href="images/logo_white.svg">
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <!-- Auth Guard -->
+    <script>
+        // Check local storage directly for immediate redirect before page renders
+        if (!localStorage.getItem('user')) {
+            window.location.href = 'login.html';
+        }
+    </script>
+
+    <!-- Stripe JS -->
+    <!-- Stripe JS Removed -->
+    <!-- PayPal JS SDK (Sandbox Client ID) -->
+    <script src="https://www.paypal.com/sdk/js?client-id=ba&currency=USD"></script>
+    <!-- Header & Navigation -->
+    <header class="header" id="header">
+        <div class="container header-container">
+            <a href="index.html" class="logo">
+                <img src="images/Logo.png" alt="Minatty Learning Hub Logo" style="height: 50px; width: auto;">
+                <span style="margin-left: 12px;">Minatty Learning Hub</span>
+            </a>
+
+            <nav class="nav">
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="subjects.html" class="nav-link">Subjects</a></li>
+                    <li><a href="how-it-works.html" class="nav-link">How It Works</a></li>
+                    <li><a href="become-tutor.html" class="nav-link" id="navBecomeTutor">Become a Tutor</a></li>
+                    <li><a href="tutors.html" class="nav-link active" id="navFindTutors">Find Tutors</a></li>
+                    <li id="authButtons" class="auth-buttons-container"></li>
+                </ul>
+
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Page Hero -->
+    <section class="hero">
+        <div class="container">
+            <div class="text-center" style="max-width: 800px; margin: 0 auto;">
+                <h1>Find Your Perfect Tutor</h1>
+                <p style="font-size: var(--font-size-xl); color: var(--color-text-secondary);">
+                    Browse verified Tutors for Grades 4-12. Filter by subject, grade, rate, and availability.
+                </p>
+            </div>
+
+            <!-- Search/Filter Bar -->
+            <div class="search-bar" style="margin-top: var(--space-8);">
+                <div class="search-field">
+                    <label for="filterSubject">Subject</label>
+                    <select id="filterSubject">
+                        <option value="">All Subjects</option>
+                        <option value="english">English</option>
+                        <option value="afrikaans">Afrikaans</option>
+                        <option value="mathematics">Mathematics</option>
+                        <option value="mathematical-literacy">Mathematical Literacy</option>
+                        <option value="physical-science">Physical Science</option>
+                        <option value="natural-science">Natural Science</option>
+                        <option value="life-sciences">Life Sciences</option>
+                        <option value="accounting">Accounting</option>
+                        <option value="geography">Geography</option>
+                        <option value="cat">Computer Applications Tech (CAT)</option>
+                        <option value="it">Information Technology (IT)</option>
+                        <option value="economics">Economics</option>
+                        <option value="isizulu">IsiZulu</option>
+                        <option value="coding">Coding</option>
+                    </select>
+                </div>
+
+                <div class="search-field">
+                    <label for="filterGrade">Grade Level</label>
+                    <select id="filterGrade">
+                        <option value="">All Grades</option>
+                        <option value="4">Grade 4</option>
+                        <option value="5">Grade 5</option>
+                        <option value="6">Grade 6</option>
+                        <option value="7">Grade 7</option>
+                        <option value="8">Grade 8</option>
+                        <option value="9">Grade 9</option>
+                        <option value="10">Grade 10</option>
+                        <option value="11">Grade 11</option>
+                        <option value="12">Grade 12</option>
+                    </select>
+                </div>
+
+                <div class="search-field">
+                    <label for="filterRate">Max Rate (R/hour)</label>
+                    <select id="filterRate">
+                        <option value="">Any Rate</option>
+                        <option value="200">Under R200</option>
+                        <option value="300">Under R300</option>
+                        <option value="400">Under R400</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-primary btn-lg" id="applyFilters">Apply Filters</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tutor Results -->
+    <section class="section">
+        <div class="container">
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-6);">
+                <p class="text-muted"><span id="resultCount">250</span> tutors found</p>
+
+                <div style="display: flex; align-items: center; gap: var(--space-3);">
+                    <label for="sortBy" style="font-weight: var(--font-weight-medium);">Sort by:</label>
+                    <select id="sortBy"
+                        style="padding: var(--space-2) var(--space-3); border: 1px solid var(--color-border); border-radius: var(--radius-md);">
+                        <option value="rating">Highest Rated</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="experience">Most Experience</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Tutor Cards Grid -->
+            <div class="grid grid-3" id="tutorGrid">
+                <!-- Tutors will be loaded dynamically via JS -->
+            </div>
+
+            <!-- Load More -->
+            <div class="text-center mt-8">
+                <button class="btn btn-outline btn-lg" style="display: none;">Load More Tutors</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="section" style="background-color: var(--color-bg-light-gray);">
+        <div class="container">
+            <div class="text-center"
+                style="padding: var(--space-10); background: linear-gradient(135deg, var(--color-primary), var(--color-secondary)); border-radius: var(--radius-2xl); color: white;">
+                <h2 style="color: white; margin-bottom: var(--space-4);">Not Finding the Right Tutor?</h2>
+                <p style="font-size: var(--font-size-lg); margin-bottom: var(--space-6); opacity: 0.95;">
+                    Contact our team and we'll help you find the perfect match for your needs
+                </p>
+                <a href="#contact" class="btn btn-lg" style="background: white; color: var(--color-primary);">Contact
+                    Support</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                        <img src="images/Logo.png" alt="Minatty Learning Hub"
+                            style="height: 40px; width: auto; background-color: white; padding: 4px; border-radius: 6px;">
+                        <h3 style="margin: 0;">Minatty Learning Hub</h3>
+                    </div>
+                    <p>The most effective tutoring platform for all major school subjects. Helping high school students
+                        achieve their academic goals since 2020.</p>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <div class="footer-links">
+                        <a href="index.html">Home</a>
+                        <a href="subjects.html">Subjects</a>
+                        <a href="how-it-works.html">How It Works</a>
+                        <a href="tutors.html" id="footerFindTutors">Find Tutors</a>
+                        <a href="become-tutor.html" id="footerBecomeTutor">Become a Tutor</a>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <div class="footer-links">
+                        <a href="how-it-works.html#faq">FAQ</a>
+                        <a href="contact.html">Contact Us</a>
+                        <a href="admin.html">Admin</a>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Connect</h3>
+                    <div class="footer-links">
+                        <a href="#facebook">Facebook</a>
+                        <a href="https://www.tiktok.com/@Minatty10" target="_blank">TikTok</a>
+                        <a href="#instagram">Instagram</a>
+                        <a href="#linkedin">LinkedIn</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 Minatty Learning Hub. All rights reserved. | <a href="#privacy">Privacy Policy</a> | <a
+                        href="#terms">Terms of Service</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js?v=2"></script>
+    <script type="module" src="js/auth.js"></script>
+    <script src="js/tutors.js?v=3"></script>
+</body>
+
+</html>
