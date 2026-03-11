@@ -74,9 +74,54 @@
         <div id="errorBox" class="error-box"></div>
     </div>
 
-    <script>
-        // Google OAuth is not active without InsForge — redirect to home
-        window.location.href = 'index.html';
+    <script type="module">
+        import auth from './js/auth.js';
+
+        async function handleCallback() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get('token');
+            const error = urlParams.get('error');
+            const errorBox = document.getElementById('errorBox');
+
+            if (error) {
+                errorBox.textContent = 'Authentication failed. Please try again.';
+                errorBox.style.display = 'block';
+                setTimeout(() => window.location.href = 'login.html', 3000);
+                return;
+            }
+
+            if (!token) {
+                errorBox.textContent = 'No authentication token received.';
+                errorBox.style.display = 'block';
+                setTimeout(() => window.location.href = 'login.html', 3000);
+                return;
+            }
+
+            try {
+                // Store the token immediately
+                localStorage.setItem('token', token);
+
+                // Fetch the user's latest data using the token
+                const user = await auth.refreshUser();
+
+                if (user) {
+                    // Success! Redirect to home page
+                    window.location.href = 'index.html';
+                } else {
+                    throw new Error("Failed to fetch user profile");
+                }
+            } catch (err) {
+                console.error(err);
+                // Clear any partial state
+                localStorage.removeItem('token');
+                errorBox.textContent = 'Failed to load profile. Please sign in again.';
+                errorBox.style.display = 'block';
+                setTimeout(() => window.location.href = 'login.html', 3000);
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', handleCallback);
     </script>
 </body>
 

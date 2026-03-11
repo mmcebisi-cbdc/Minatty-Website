@@ -499,9 +499,15 @@
     <script type="module">
         import auth from './js/auth.js';
 
-        // Hide Google button since OAuth requires InsForge
+        // Initialize Google OAuth click handler
         const googleBtn = document.getElementById('googleBtn');
-        if (googleBtn) googleBtn.style.display = 'none';
+        if (googleBtn) {
+            googleBtn.addEventListener('click', () => {
+                const _isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+                const _apiBase = _isLocal ? 'http://localhost:5000/api' : 'https://minatty-website.onrender.com/api';
+                window.location.href = `${_apiBase}/auth/google`;
+            });
+        }
 
         document.getElementById('registerForm').addEventListener('submit', async (e) => {
             e.preventDefault();

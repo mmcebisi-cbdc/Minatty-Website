@@ -65,6 +65,21 @@ app.use(cors({
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+const session = require('express-session');
+const passport = require('passport');
+
+// Require the passport configuration
+require('./config/passport');
+
+app.use(session({
+    secret: process.env.JWT_SECRET || 'fallback_secret',
+    resave: false,
+    saveUninitialized: false,
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(express.static(path.join(__dirname, '../')));
 // Serve images from images/ at the /images/ path
 app.use('/images', express.static(path.join(__dirname, '../images')));

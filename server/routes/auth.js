@@ -8,6 +8,63 @@ const User = require('../models/User');
 const Student = require('../models/Student');
 const Tutor = require('../models/Tutor');
 
+const passport = require('passport');
+
+// @route   GET /api/auth/google
+// @desc    Initiate Google OAuth flow
+// @access  Public
+router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+// @route   GET /api/auth/google/callback
+// @desc    Google OAuth callback endpoint
+// @access  Public
+router.get('/google/callback',
+    passport.authenticate('google', { failureRedirect: '/login.html?error=google_auth_failed' }),
+    async (req, res) => {
+        try {
+            // User is successfully authenticated via Google. req.user holds the user object
+            const user = req.user;
+
+            // Build the payload 
+            let userResponse = { id: user.id, name: user.name, email: user.email, role: user.role };
+
+            // Append profile data
+            if (user.role === 'student') {
+                const student = await Student.findOne({ user: user._id });
+                if (student) userResponse = { ...userResponse, ...student.toObject() };
+            } else if (user.role === 'tutor') {
+                const tutor = await Tutor.findOne({ email: user.email });
+                if (tutor) userResponse = { ...userResponse, ...tutor.toObject() };
+            }
+
+            const payload = {
+                user: { id: user.id, role: user.role }
+            };
+
+            jwt.sign(
+                payload,
+                process.env.JWT_SECRET || 'your-secret-key',
+                { expiresIn: '30d' },
+                (err, token) => {
+                    if (err) throw err;
+                    // Provide the token and user to the frontend via URL parameters 
+                    // Since it's a GET request initiated by the browser redirect, we MUST redirect
+                    // to a specific frontend screen to finalize and store the token.
+                    const redirectUrl = process.env.NODE_ENV === 'production'
+                        ? 'https://minatty-hub.vercel.app/oauth-callback.html'
+                        : 'http://localhost:5000/oauth-callback.html';
+
+                    // Using URL-safe string encoding
+                    res.redirect(`${redirectUrl}?token=${token}`);
+                }
+            );
+        } catch (err) {
+            console.error('Google Callback Error:', err.message);
+            res.redirect('/login.html?error=server_error');
+        }
+    }
+);
+
 // @route   POST /api/auth/register
 // @desc    Register a new user
 // @access  Public
