@@ -9,24 +9,65 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const mongoose = require('mongoose');
 
+// ── MongoDB Connection ────────────────────────────────────────────────────────
+if (!process.env.MONGODB_URI) {
+    console.error('❌ FATAL: MONGODB_URI environment variable is not set!');
+    console.error('   On Render: Dashboard → your service → Environment → Add MONGODB_URI');
+    console.error('   Falling back to localhost (will FAIL on cloud servers like Render)');
+}
 
-// Connect to MongoDB
+let dbConnected = false;
+
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/minatty', {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 10000,
+    connectTimeoutMS: 10000
 })
-    .then(() => console.log('✅ MongoDB Connected'))
-    .catch(err => console.error('❌ MongoDB Connection Error:', err));
+    .then(() => {
+        dbConnected = true;
+        console.log('✅ MongoDB Connected to:', process.env.MONGODB_URI ? 'Atlas (cloud)' : 'localhost (fallback)');
+    })
+    .catch(err => {
+        console.error('❌ MongoDB Connection FAILED:', err.message);
+        console.error('   Full error details:', JSON.stringify(err, null, 2));
+    });
 
 
 // Middleware
-app.use(cors());
+const allowedOrigins = [
+    'http://localhost:5000',
+    'http://localhost:3000',
+    'http://127.0.0.1:5500',  // Live Server (VS Code)
+    'https://minatty-hub.vercel.app',
+    /^https:\/\/minatty-.*\.vercel\.app$/ // Any Vercel preview deployments
+];
+
+app.use(cors({
+    origin: function (origin, callback) {
+        // Allow requests with no origin (e.g. mobile apps, curl, Postman)
+        if (!origin) return callback(null, true);
+
+        const isAllowed = allowedOrigins.some(allowed =>
+            typeof allowed === 'string' ? allowed === origin : allowed.test(origin)
+        );
+
+        if (isAllowed) {
+            callback(null, true);
+        } else {
+            callback(new Error(`CORS blocked: origin ${origin} not allowed`));
+        }
+    },
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'x-auth-token'],
+    credentials: true
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(__dirname, '../')));
-// Serve images from js/images/ at the /images/ path
-app.use('/images', express.static(path.join(__dirname, '../js/images')));
+// Serve images from images/ at the /images/ path
+app.use('/images', express.static(path.join(__dirname, '../images')));
 // Serve uploads
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
@@ -43,6 +84,23 @@ app.use('/api/bookings', bookingRoutes);
 app.use('/api/applications', applicationRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/contact', contactRoutes);
+
+// ── Health Check (visit /api/health to diagnose DB + env issues) ──────────────
+app.get('/api/health', (req, res) => {
+    const dbState = mongoose.connection.readyState;
+    const states = { 0: 'disconnected', 1: 'connected', 2: 'connecting', 3: 'disconnecting' };
+    res.json({
+        status: dbState === 1 ? 'ok' : 'degraded',
+        database: states[dbState] || 'unknown',
+        env: {
+            MONGODB_URI: process.env.MONGODB_URI ? '✅ set' : '❌ MISSING',
+            JWT_SECRET: process.env.JWT_SECRET ? '✅ set' : '❌ MISSING',
+            ADMIN_PASSWORD: process.env.ADMIN_PASSWORD ? '✅ set' : '❌ MISSING',
+            PORT: process.env.PORT || '(default 5000)'
+        },
+        timestamp: new Date().toISOString()
+    });
+});
 
 // Serve static files
 app.get('/', (req, res) => {

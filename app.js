@@ -1,3 +1,6 @@
+const _isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const API_BASE = _isLocal ? 'http://localhost:5000/api' : 'https://minatty-website.onrender.com/api';
+
 // ===================================
 // TUTORING WEBSITE - JAVASCRIPT
 // Math & Physical Science
@@ -475,7 +478,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             try {
                 // Submit to API
-                const response = await fetch('http://localhost:5000/api/applications', {
+                const response = await fetch(`${API_BASE}/applications`, {
                     method: 'POST',
                     body: formData // No Content-Type header needed, browser sets it for FormData
                 });
@@ -912,8 +915,7 @@ if (tutorApplicationForm) {
             // Submit to API
             // Using relative path to avoid hardcoded localhost if deployed elsewhere
             // But falling back to absolute if needed (or assume proxy)
-            // For this environment, localhost:5000 is the server.
-            const response = await fetch('http://localhost:5000/api/applications', {
+            const response = await fetch(`${API_BASE}/applications`, {
                 method: 'POST',
                 body: formData // No Content-Type header needed, browser sets it for FormData
             });

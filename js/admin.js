@@ -4,7 +4,7 @@
  */
 
 const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-const API_BASE = isLocal ? 'http://localhost:5000/api' : 'https://minatty-backend.onrender.com/api';
+const API_BASE = isLocal ? 'http://localhost:5000/api' : 'https://minatty-website.onrender.com/api';
 
 document.addEventListener('DOMContentLoaded', () => {
     checkAuth();
@@ -98,8 +98,9 @@ async function fetchApplications() {
             const getFileUrl = (path) => {
                 if (!path) return '';
                 if (path.startsWith('http')) return path;
-                if (path.startsWith('/uploads')) return `http://localhost:5000${path}`;
-                return `http://localhost:5000/uploads/${path}`;
+                const base = isLocal ? 'http://localhost:5000' : 'https://minatty-website.onrender.com';
+                if (path.startsWith('/uploads')) return `${base}${path}`;
+                return `${base}/uploads/${path}`;
             };
 
             const profileUrl = getFileUrl(app.profileImage);

@@ -1,10 +1,11 @@
 /**
  * Minatty Hub — Authentication Module
  * Uses the local Express/MongoDB API at http://localhost:5000/api/auth
+ * Production: https://minatty-website.onrender.com/api/auth
  */
 
 const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-const API_BASE = isLocal ? 'http://localhost:5000/api/auth' : 'https://minatty-backend.onrender.com/api/auth';
+const API_BASE = isLocal ? 'http://localhost:5000/api/auth' : 'https://minatty-website.onrender.com/api/auth';
 
 // ─── Auth Object ──────────────────────────────────────────────────────────────
 const auth = {
