@@ -149,11 +149,12 @@ const auth = {
 
     // ── Intercept protected nav links for unauthenticated users ───────────────
     handleTutorNavigation: () => {
+        // Only override if NOT authenticated
+        if (auth.isAuthenticated()) return;
+
         ['tutors.html', 'become-tutor.html'].forEach(page => {
             document.querySelectorAll(`a[href*="${page}"]`).forEach(link => {
-                const newLink = link.cloneNode(true);
-                link.parentNode.replaceChild(newLink, link);
-                newLink.addEventListener('click', (e) => {
+                link.addEventListener('click', (e) => {
                     if (!auth.isAuthenticated()) {
                         e.preventDefault();
                         window.location.href = `login.html`;

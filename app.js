@@ -748,8 +748,7 @@ function sortTutors() {
     });
 
     // Re-append sorted cards
-    tutorCards.forEach(card => {
-        tutorGrid.appendChild(card);
+    tutorGrid.appendChild(card);
     });
 }
 
