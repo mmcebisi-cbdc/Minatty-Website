@@ -231,19 +231,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // ===================================
-    // VIEW PROFILE BUTTONS
-    // ===================================
-
-    const viewProfileButtons = document.querySelectorAll('.view-profile-btn');
-
-    viewProfileButtons.forEach(button => {
-        button.addEventListener('click', function () {
-            // In a real application, this would open a detailed profile modal or page
-            alert('This would open the tutor\'s detailed profile.\n\nFeatures would include:\n- Full biography\n- Detailed qualifications\n- Student reviews\n- Availability calendar\n- Book a lesson button');
-        });
-    });
-
-    // ===================================
     // CUSTOM MULTI-SELECT DROPDOWN
     // ===================================
 
@@ -765,19 +752,6 @@ function sortTutors() {
         tutorGrid.appendChild(card);
     });
 }
-
-// ===================================
-// VIEW PROFILE BUTTONS
-// ===================================
-
-const viewProfileButtons = document.querySelectorAll('.view-profile-btn');
-
-viewProfileButtons.forEach(button => {
-    button.addEventListener('click', function () {
-        // In a real application, this would open a detailed profile modal or page
-        alert('This would open the tutor\'s detailed profile.\n\nFeatures would include:\n- Full biography\n- Detailed qualifications\n- Student reviews\n- Availability calendar\n- Book a lesson button');
-    });
-});
 
 // ===================================
 // FORM VALIDATION (Become a Tutor)

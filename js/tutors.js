@@ -127,10 +127,14 @@ function renderTutors(tutors) {
         let profileHtml = '<div class="profile-placeholder" style="width: 80px; height: 80px; border-radius: 50%; background-color: #e2e8f0; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #64748b;">' + (tutor.fullName ? tutor.fullName.charAt(0).toUpperCase() : '?') + '</div>';
 
         if (tutor.profileImage) {
+            // Robust base URL derivation (handles /api or /api/)
+            const baseUrl = API_BASE.split('/api')[0];
+            const imageUrl = tutor.profileImage.startsWith('/uploads') ? `${baseUrl}${tutor.profileImage}` : tutor.profileImage;
+
             // Use onerror to handle 404/400 errors
-            profileHtml = `<img src="${tutor.profileImage}" alt="${tutor.fullName}"
+            profileHtml = `<img src="${imageUrl}" alt="${tutor.fullName}"
                 style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;"
-                onerror="this.onerror=null; this.parentNode.innerHTML='<div class=\\'profile-placeholder\\' style=\\'width: 80px; height: 80px; border-radius: 50%; background-color: #e2e8f0; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #64748b;\\'>${tutor.fullName ? tutor.fullName.charAt(0).toUpperCase() : '?'}</div>'">`;
+                onerror="this.onerror=null; this.parentNode.innerHTML='<div style=\\'width: 80px; height: 80px; border-radius: 50%; background-color: #e2e8f0; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #64748b;\\'>${tutor.fullName ? tutor.fullName.charAt(0).toUpperCase() : '?'}</div>'">`;
         } else {
             const initials = tutor.fullName ? tutor.fullName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : '??';
             profileHtml = `<div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--color-primary), var(--color-secondary)); display: flex; align-items: center; justify-content: center; color: white; font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold);">${initials}</div>`;
@@ -198,7 +202,7 @@ function renderTutors(tutors) {
             }
                      <a href="profile.html?id=${tutor._id}" class="btn btn-outline" style="padding: 8px 15px; text-decoration: none;">View Profile</a>
                     ${(typeof auth !== 'undefined' && auth.getUser() && auth.getUser().role === 'tutor') ? '' :
-                `<button class="btn btn-primary view-profile-btn" onclick="openBookingModal('${tutor._id}', '${safeName}', '${safeSubjects}', ${tutor.hourlyRate || 0})">Book Session</button>`
+                `<button class="btn btn-primary" onclick="openBookingModal('${tutor._id}', '${safeName}', '${safeSubjects}', ${tutor.hourlyRate || 0})">Book Session</button>`
             }
                 </div>
             </div>
@@ -818,7 +822,7 @@ window.closeViewReviewsModal = function () {
     document.getElementById('viewReviewsModal').style.display = 'none';
 }
 
-function formatSubject(code) {
+window.formatSubject = function (code) {
     // Map of specific codes to nice labels
     const map = {
         'mathematics-grade-12': 'Math (Gr 12)',
@@ -852,3 +856,6 @@ function formatSubject(code) {
         .map(word => word.charAt(0).toUpperCase() + word.slice(1))
         .join(' ');
 }
+
+// Map the old name for internal use within this file
+const formatSubject = window.formatSubject;

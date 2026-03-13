@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 async function loadTutorProfile(tutorId) {
-    const response = await fetch(`/api/tutors/${tutorId}`);
+    const response = await fetch(`${API_BASE}/tutors/${tutorId}`);
     if (!response.ok) throw new Error('Failed to fetch tutor');
 
     const tutor = await response.json();
@@ -33,7 +33,12 @@ async function loadTutorProfile(tutorId) {
     // Image
     const imgContainer = document.getElementById('profileImageContainer');
     if (tutor.profileImage) {
-        imgContainer.innerHTML = `<img src="${tutor.profileImage}" alt="${tutor.fullName}" class="profile-image-large" onerror="this.onerror=null; this.src='images/default_profile.png'">`;
+        // Robust base URL derivation (handles /api or /api/)
+        const baseUrl = API_BASE.split('/api')[0];
+        const imageUrl = tutor.profileImage.startsWith('/uploads') ? `${baseUrl}${tutor.profileImage}` : tutor.profileImage;
+
+        imgContainer.innerHTML = `<img src="${imageUrl}" alt="${tutor.fullName}" class="profile-image-large" 
+            onerror="this.onerror=null; this.parentNode.innerHTML='<div class=\\'profile-image-large\\' style=\\'background: linear-gradient(135deg, var(--color-primary), var(--color-secondary)); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;\\'>${tutor.fullName ? tutor.fullName.charAt(0).toUpperCase() : '?'}</div>'">`;
     } else {
         const initials = tutor.fullName ? tutor.fullName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : '??';
         imgContainer.innerHTML = `<div class="profile-image-large" style="background: linear-gradient(135deg, var(--color-primary), var(--color-secondary)); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">${initials}</div>`;
