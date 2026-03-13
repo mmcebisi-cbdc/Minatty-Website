@@ -38,11 +38,10 @@ window.deleteTutor = async function (id) {
 
 async function fetchTutors() {
     const tutorGrid = document.getElementById('tutorGrid');
-    const resultCount = document.getElementById('resultCount');
+    if (!tutorGrid) return; // Guard for pages without a tutor grid
 
-    if (tutorGrid) {
-        tutorGrid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px;">Loading tutors...</div>';
-    }
+    const resultCount = document.getElementById('resultCount');
+    tutorGrid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px;">Loading tutors...</div>';
 
     const subject = document.getElementById('filterSubject')?.value || '';
     const grade = document.getElementById('filterGrade')?.value || '';
