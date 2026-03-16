@@ -152,7 +152,7 @@ const auth = {
         // Only override if NOT authenticated
         if (auth.isAuthenticated()) return;
 
-        ['tutors.html', 'become-tutor.html'].forEach(page => {
+        ['become-tutor.html'].forEach(page => {
             document.querySelectorAll(`a[href*="${page}"]`).forEach(link => {
                 link.addEventListener('click', (e) => {
                     if (!auth.isAuthenticated()) {

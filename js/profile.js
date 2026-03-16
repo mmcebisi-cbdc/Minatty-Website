@@ -46,6 +46,15 @@ async function loadTutorProfile(tutorId) {
 
     // Text Fields
     document.getElementById('profileName').textContent = tutor.fullName;
+    if (tutor.verified) {
+        const verifiedBadge = document.createElement('span');
+        verifiedBadge.className = 'badge badge-success';
+        verifiedBadge.style.marginLeft = '10px';
+        verifiedBadge.style.fontSize = '0.8rem';
+        verifiedBadge.style.verticalAlign = 'middle';
+        verifiedBadge.innerHTML = '<i class="fas fa-check-circle"></i> Verified';
+        document.getElementById('profileName').appendChild(verifiedBadge);
+    }
     document.getElementById('profileQualification').textContent = tutor.qualification;
     document.getElementById('profileRating').textContent = `${tutor.rating ? tutor.rating.toFixed(1) : 'New'} (${tutor.totalReviews || 0} reviews)`;
     document.getElementById('profileExperience').textContent = tutor.experience;

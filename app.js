@@ -1,18 +1,18 @@
 const _isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 const API_BASE = _isLocal ? 'http://localhost:5000/api' : 'https://minatty-website.onrender.com/api';
+window.API_BASE = API_BASE; // Make globally accessible to other scripts
 
 // ===================================
 // TUTORING WEBSITE - JAVASCRIPT
 // Math & Physical Science
 // ===================================
 
-// ===================================
-// MOBILE NAVIGATION
-// ===================================
-
 document.addEventListener('DOMContentLoaded', function () {
     console.log('App.js DOMContentLoaded fired');
-    // Mobile menu toggle
+    
+    // ===================================
+    // MOBILE NAVIGATION
+    // ===================================
     const mobileMenuToggle = document.getElementById('mobileMenuToggle');
     const navLinks = document.getElementById('navLinks');
 
@@ -35,11 +35,6 @@ document.addEventListener('DOMContentLoaded', function () {
     // ===================================
     // HEADER SCROLL EFFECT
     // ===================================
-
-    // ===================================
-    // HEADER SCROLL EFFECT
-    // ===================================
-
     const header = document.getElementById('header');
 
     if (header) {
@@ -55,15 +50,11 @@ document.addEventListener('DOMContentLoaded', function () {
     // ===================================
     // SMOOTH SCROLLING FOR ANCHOR LINKS
     // ===================================
-
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             const href = this.getAttribute('href');
 
-            // Ignore empty fragments
-            if (href === '#' || href === '#!') {
-                return;
-            }
+            if (href === '#' || href === '#!') return;
 
             try {
                 const target = document.querySelector(href);
@@ -87,35 +78,33 @@ document.addEventListener('DOMContentLoaded', function () {
     // ===================================
     // SCROLL ANIMATIONS
     // ===================================
+    if ('IntersectionObserver' in window) {
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
 
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
+        const observer = new IntersectionObserver(function (entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
 
-    const observer = new IntersectionObserver(function (entries) {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
-            }
+        document.querySelectorAll('.card, .hero-content > *').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+            observer.observe(el);
         });
-    }, observerOptions);
-
-    // Observe cards and sections for animation
-    document.querySelectorAll('.card, .hero-content > *').forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(20px)';
-        el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
-        observer.observe(el);
-    });
+    }
 
     // ===================================
     // SEARCH BAR FUNCTIONALITY (Homepage)
     // ===================================
-
     const searchButton = document.querySelector('.search-bar button');
-
     if (searchButton) {
         searchButton.addEventListener('click', function () {
             const subject = document.getElementById('subject')?.value;
@@ -134,435 +123,20 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // ===================================
-    // TUTOR FILTERING (Tutors Page)
-    // ===================================
-
-    const applyFiltersBtn = document.getElementById('applyFilters');
-
-    if (applyFiltersBtn) {
-        applyFiltersBtn.addEventListener('click', filterTutors);
-    }
-
-    function filterTutors() {
-        const subjectFilter = document.getElementById('filterSubject')?.value.toLowerCase();
-        const gradeFilter = document.getElementById('filterGrade')?.value;
-        const rateFilter = parseInt(document.getElementById('filterRate')?.value) || Infinity;
-
-        const tutorCards = document.querySelectorAll('.tutor-card');
-        let visibleCount = 0;
-
-        tutorCards.forEach(card => {
-            const cardSubject = card.getAttribute('data-subject');
-            const cardGrade = card.getAttribute('data-grade');
-            const cardRate = parseInt(card.getAttribute('data-rate'));
-
-            let show = true;
-
-            // Apply subject filter
-            if (subjectFilter && !cardSubject.includes(subjectFilter)) {
-                show = false;
-            }
-
-            // Apply grade filter
-            if (gradeFilter && cardGrade !== gradeFilter) {
-                show = false;
-            }
-
-            // Apply rate filter
-            if (cardRate > rateFilter) {
-                show = false;
-            }
-
-            // Show or hide card
-            if (show) {
-                card.style.display = '';
-                visibleCount++;
-            } else {
-                card.style.display = 'none';
-            }
-        });
-
-        // Update result count
-        const resultCount = document.getElementById('resultCount');
-        if (resultCount) {
-            resultCount.textContent = visibleCount;
-        }
-    }
-
-    // ===================================
-    // TUTOR SORTING (Tutors Page)
-    // ===================================
-
-    const sortBy = document.getElementById('sortBy');
-
-    if (sortBy) {
-        sortBy.addEventListener('change', sortTutors);
-    }
-
-    function sortTutors() {
-        const sortValue = document.getElementById('sortBy')?.value;
-        const tutorGrid = document.getElementById('tutorGrid');
-        const tutorCards = Array.from(document.querySelectorAll('.tutor-card'));
-
-        tutorCards.sort((a, b) => {
-            const rateA = parseInt(a.getAttribute('data-rate'));
-            const rateB = parseInt(b.getAttribute('data-rate'));
-
-            switch (sortValue) {
-                case 'price-low':
-                    return rateA - rateB;
-                case 'price-high':
-                    return rateB - rateA;
-                case 'rating':
-                    // Default order (already sorted by rating)
-                    return 0;
-                case 'experience':
-                    // Could add data-experience attribute for real sorting
-                    return 0;
-                default:
-                    return 0;
-            }
-        });
-
-        // Re-append sorted cards
-        tutorCards.forEach(card => {
-            tutorGrid.appendChild(card);
-        });
-    }
-
-    // ===================================
-    // CUSTOM MULTI-SELECT DROPDOWN
-    // ===================================
-
-    // Handle dropdown open/close with event delegation
-    document.addEventListener('click', (e) => {
-        // Toggle dropdown when clicking the trigger
-        const trigger = e.target.closest('.dropdown-trigger');
-        if (trigger) {
-            e.preventDefault();
-            const dropdown = trigger.closest('.custom-dropdown');
-            if (dropdown) {
-                const content = dropdown.querySelector('.dropdown-content');
-                trigger.classList.toggle('active');
-                if (content) content.classList.toggle('show');
-            }
-            return;
-        }
-
-        // Close dropdowns when clicking outside
-        document.querySelectorAll('.custom-dropdown').forEach(dropdown => {
-            if (!dropdown.contains(e.target)) {
-                const t = dropdown.querySelector('.dropdown-trigger');
-                const c = dropdown.querySelector('.dropdown-content');
-                if (t) t.classList.remove('active');
-                if (c) c.classList.remove('show');
-            }
-        });
-    });
-
-    const subjectDropdown = document.getElementById('subjectDropdown');
-
-    if (subjectDropdown) {
-        const trigger = subjectDropdown.querySelector('.dropdown-trigger');
-        const content = subjectDropdown.querySelector('.dropdown-content');
-        const checkboxes = content ? content.querySelectorAll('input[type="checkbox"]') : [];
-
-        if (trigger && content) {
-
-            // Initial text update
-            function updateTriggerText() {
-                const selected = Array.from(checkboxes)
-                    .filter(cb => cb.checked)
-                    .map(cb => cb.parentElement.textContent.trim());
-
-                if (selected.length === 0) {
-                    trigger.textContent = 'Select subjects...';
-                    trigger.style.color = 'var(--color-text-muted)';
-                } else if (selected.length <= 2) {
-                    trigger.textContent = selected.join(', ');
-                    trigger.style.color = 'var(--color-text-primary)';
-                } else {
-                    trigger.textContent = `${selected.length} subjects selected`;
-                    trigger.style.color = 'var(--color-text-primary)';
-                }
-            }
-
-            checkboxes.forEach(cb => {
-                cb.addEventListener('change', updateTriggerText);
-            });
-        }
-    }
-
-    // ===================================
-    // FORM VALIDATION (Become a Tutor)
-    // ===================================
-
-    const tutorApplicationForm = document.getElementById('tutorApplicationForm');
-
-    if (tutorApplicationForm) {
-        console.log('Tutor application form found, attaching listener');
-
-        // Helper to show messages on page instead of alert()
-        const showFeedback = (message, type = 'error') => {
-            let feedbackEl = document.getElementById('form-feedback');
-            if (!feedbackEl) {
-                feedbackEl = document.createElement('div');
-                feedbackEl.id = 'form-feedback';
-                feedbackEl.style.padding = '1rem';
-                feedbackEl.style.marginBottom = '1rem';
-                feedbackEl.style.borderRadius = '0.5rem';
-                feedbackEl.style.fontWeight = '500';
-
-                // Insert before the submit button
-                const submitBtn = tutorApplicationForm.querySelector('button[type="submit"]');
-                tutorApplicationForm.insertBefore(feedbackEl, submitBtn);
-            }
-
-            feedbackEl.textContent = message;
-            if (type === 'error') {
-                feedbackEl.style.backgroundColor = '#fee2e2';
-                feedbackEl.style.color = '#991b1b';
-                feedbackEl.style.border = '1px solid #f87171';
-            } else {
-                feedbackEl.style.backgroundColor = '#dcfce7';
-                feedbackEl.style.color = '#166534';
-                feedbackEl.style.border = '1px solid #4ade80';
-            }
-
-            // Scroll to message
-            feedbackEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        };
-
-        // Pre-fill form if user is logged in
-        try {
-            if (typeof auth !== 'undefined' && auth.isAuthenticated()) {
-                const user = auth.getUser();
-                if (user) {
-                    if (user.name) document.getElementById('fullName').value = user.name;
-                    if (user.email) document.getElementById('email').value = user.email;
-                    if (user.phone) document.getElementById('phone').value = user.phone;
-                    if (user.qualification) document.getElementById('qualification').value = user.qualification;
-                    if (user.hourlyRate) document.getElementById('preferredRate').value = user.hourlyRate;
-                }
-            }
-        } catch (e) {
-            console.warn('Auth pre-fill error:', e);
-        }
-
-        tutorApplicationForm.addEventListener('submit', async function (e) {
-            e.preventDefault();
-            console.log('Submit button clicked');
-
-            // Clear previous feedback
-            const existingFeedback = document.getElementById('form-feedback');
-            if (existingFeedback) existingFeedback.style.display = 'none';
-
-            // Get form elements by ID for reliability
-            const fullName = document.getElementById('fullName').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const phone = document.getElementById('phone').value.trim();
-            const qualification = document.getElementById('qualification').value;
-            const experience = document.getElementById('experience').value;
-            const preferredRate = parseInt(document.getElementById('preferredRate').value);
-            const location = document.getElementById('location').value.trim();
-            const bio = document.getElementById('bio').value.trim();
-
-            // Validate Email
-            if (!isValidEmail(email)) {
-                showFeedback('Please enter a valid email address.');
-                return;
-            }
-
-            // Validate Phone
-            if (!isValidPhone(phone)) {
-                console.log('Phone validation failed:', phone);
-                showFeedback('Please enter a valid South African phone number (e.g., 0821234567 or +27821234567).');
-                return;
-            }
-
-            // Check if at least one subject is selected
-            const subjectCheckboxes = document.querySelectorAll('input[name="subjects"]:checked');
-            const formatCheckboxes = document.querySelectorAll('input[name="format"]:checked');
-
-            if (subjectCheckboxes.length === 0) {
-                showFeedback('Please select at least one subject you can teach.');
-                return;
-            }
-
-            if (formatCheckboxes.length === 0) {
-                showFeedback('Please select at least one teaching format (Online or In-Person).');
-                return;
-            }
-
-            const subjects = Array.from(subjectCheckboxes).map(cb => cb.value);
-            const teachingFormat = Array.from(formatCheckboxes).map(cb => cb.value);
-
-            // Validate Files (Size and Type)
-            const validateFile = (fileInput, fieldName) => {
-                if (!fileInput) return true; // Should ideally exist
-                const file = fileInput.files[0];
-                if (!file) return true; // Required check is handled by HTML
-
-                // Check size (5MB)
-                if (file.size > 5 * 1024 * 1024) {
-                    console.log('File too large:', fieldName, file.size);
-                    showFeedback(`File for ${fieldName} is too large. Maximum size is 5MB.`);
-                    return false;
-                }
-
-                // Check type (simple check)
-                const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'];
-                if (!validTypes.includes(file.type)) {
-                    showFeedback(`Invalid file type for ${fieldName}. Only JPG, PNG, WebP, and PDF are allowed.`);
-                    return false;
-                }
-                return true;
-            };
-
-            const profileImageInput = document.getElementById('profileImage');
-            const qualificationsDocInput = document.getElementById('qualificationsDoc');
-            const identityDocInput = document.getElementById('identityDoc');
-
-            if (!validateFile(profileImageInput, 'Profile Photo')) return;
-            if (!validateFile(qualificationsDocInput, 'Qualifications')) return;
-            if (!validateFile(identityDocInput, 'Identity Document')) return;
-
-            // Prepare application data using FormData for file upload
-            const formData = new FormData();
-            formData.append('fullName', fullName);
-            formData.append('email', email);
-            formData.append('phone', phone);
-            formData.append('qualification', qualification);
-            formData.append('experience', experience);
-            formData.append('preferredRate', preferredRate);
-            formData.append('location', location);
-            formData.append('bio', bio);
-
-            // Append array fields
-            subjects.forEach(subject => formData.append('subjects', subject));
-            teachingFormat.forEach(format => formData.append('teachingFormat', format));
-
-            // Append profile image
-            if (profileImageInput && profileImageInput.files[0]) {
-                formData.append('profileImage', profileImageInput.files[0]);
-            }
-
-            // Append qualifications document
-            if (qualificationsDocInput && qualificationsDocInput.files[0]) {
-                formData.append('qualificationsDoc', qualificationsDocInput.files[0]);
-            }
-
-            // Append identity document
-            if (identityDocInput && identityDocInput.files[0]) {
-                formData.append('identityDoc', identityDocInput.files[0]);
-            }
-
-            // Disable submit button and show loading state
-            const submitBtn = tutorApplicationForm.querySelector('button[type="submit"]');
-            const originalBtnText = submitBtn.innerHTML;
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = 'Submitting Application...';
-
-            try {
-                // Submit to API
-                const response = await fetch(`${API_BASE}/applications`, {
-                    method: 'POST',
-                    body: formData // No Content-Type header needed, browser sets it for FormData
-                });
-
-                const result = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(result.error || 'Failed to submit application');
-                }
-
-                // If validation passes, show success message
-                showFeedback('Application submitted successfully! Redirecting...', 'success');
-                alert('Application submitted successfully!\n\nThank you for applying to become a tutor with Minatty Learning Hub.\n\nOur team will review your application and contact you within 3-5 business days.');
-
-                // Reset form
-                tutorApplicationForm.reset();
-                // Reset custom dropdown trigger text
-                if (subjectDropdown) {
-                    const trigger = subjectDropdown.querySelector('.dropdown-trigger');
-                    if (trigger) {
-                        trigger.textContent = 'Select subjects...';
-                        trigger.style.color = 'var(--color-text-muted)';
-                    }
-                }
-
-                // Remove feedback after a delay
-                if (existingFeedback) existingFeedback.style.display = 'none';
-
-            } catch (error) {
-                console.error('Error submitting application:', error);
-                showFeedback('Submission Failed: ' + error.message);
-            } finally {
-                // Re-enable button
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = originalBtnText;
-            }
-        });
-    }
-
-    // ===================================
-    // LOAD MORE BUTTON (Tutors Page)
-    // ===================================
-
-    const loadMoreBtn = document.querySelector('.section button.btn-outline');
-
-    if (loadMoreBtn && loadMoreBtn.textContent.includes('Load More')) {
-        loadMoreBtn.addEventListener('click', function () {
-            alert('In a real application, this would load more tutor profiles from the server.\n\nFeatures would include:\n- Pagination\n- Infinite scroll\n- More tutor cards loaded dynamically');
-        });
-    }
-
-    // ===================================
-    // URL PARAMETER HANDLING (Auto-filter)
-    // ===================================
-
-    // Check for URL parameters and auto-apply filters
-    const urlParams = new URLSearchParams(window.location.search);
-
-    if (urlParams.has('subject')) {
-        const subjectSelect = document.getElementById('filterSubject');
-        if (subjectSelect) {
-            subjectSelect.value = urlParams.get('subject');
-        }
-    }
-
-    if (urlParams.has('grade')) {
-        const gradeSelect = document.getElementById('filterGrade');
-        if (gradeSelect) {
-            gradeSelect.value = urlParams.get('grade');
-        }
-    }
-
-    // Auto-apply filters if parameters exist
-    if ((urlParams.has('subject') || urlParams.has('grade')) && applyFiltersBtn) {
-        filterTutors();
-    }
-
-    // ===================================
     // CARD HOVER EFFECTS
     // ===================================
-
-    const cards = document.querySelectorAll('.card');
-
-    cards.forEach(card => {
+    document.querySelectorAll('.card').forEach(card => {
         card.addEventListener('mouseenter', function () {
             this.style.borderColor = 'var(--color-primary-light)';
         });
-
         card.addEventListener('mouseleave', function () {
             this.style.borderColor = 'var(--color-border-light)';
         });
     });
 
     // ===================================
-    // FAQ ACCORDION (How It Works Page)
+    // FAQ ACCORDION
     // ===================================
-
     document.body.addEventListener('click', (e) => {
         const question = e.target.closest('.faq-question');
         if (question) {
@@ -572,440 +146,76 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
     });
-});
 
-// ===================================
-// UTILITY FUNCTIONS
-// ===================================
-
-// ===================================
-// SMOOTH SCROLLING FOR ANCHOR LINKS
-// ===================================
-
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        const href = this.getAttribute('href');
-
-        // Ignore empty fragments
-        if (href === '#' || href === '#!') {
-            return;
-        }
-
-        const target = document.querySelector(href);
-
-        if (target) {
+    // ===================================
+    // BECOME A TUTOR FORM VALIDATION
+    // ===================================
+    const tutorForm = document.getElementById('tutorApplicationForm');
+    if (tutorForm) {
+        tutorForm.addEventListener('submit', async function(e) {
             e.preventDefault();
-            const headerOffset = 80;
-            const elementPosition = target.getBoundingClientRect().top;
-            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-            window.scrollTo({
-                top: offsetPosition,
-                behavior: 'smooth'
-            });
-        }
-    });
-});
-
-// ===================================
-// SCROLL ANIMATIONS
-// ===================================
-
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-};
-
-const observer = new IntersectionObserver(function (entries) {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
-        }
-    });
-}, observerOptions);
-
-// Observe cards and sections for animation
-document.querySelectorAll('.card, .hero-content > *').forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(20px)';
-    el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
-    observer.observe(el);
-});
-
-// ===================================
-// SEARCH BAR FUNCTIONALITY (Homepage)
-// ===================================
-
-const searchButton = document.querySelector('.search-bar button');
-
-if (searchButton) {
-    searchButton.addEventListener('click', function () {
-        const subject = document.getElementById('subject')?.value;
-        const grade = document.getElementById('grade')?.value;
-        const location = document.getElementById('location')?.value;
-
-        // Build query string
-        let query = 'tutors.html?';
-        if (subject) query += `subject=${subject}&`;
-        if (grade) query += `grade=${grade}&`;
-        if (location) query += `location=${encodeURIComponent(location)}&`;
-
-        // Navigate to tutors page with filters
-        window.location.href = query;
-    });
-}
-
-// ===================================
-// TUTOR FILTERING (Tutors Page)
-// ===================================
-
-const applyFiltersBtn = document.getElementById('applyFilters');
-
-if (applyFiltersBtn) {
-    applyFiltersBtn.addEventListener('click', filterTutors);
-}
-
-function filterTutors() {
-    const subjectFilter = document.getElementById('filterSubject')?.value.toLowerCase();
-    const gradeFilter = document.getElementById('filterGrade')?.value;
-    const rateFilter = parseInt(document.getElementById('filterRate')?.value) || Infinity;
-
-    const tutorCards = document.querySelectorAll('.tutor-card');
-    let visibleCount = 0;
-
-    tutorCards.forEach(card => {
-        const cardSubject = card.getAttribute('data-subject');
-        const cardGrade = card.getAttribute('data-grade');
-        const cardRate = parseInt(card.getAttribute('data-rate'));
-
-        let show = true;
-
-        // Apply subject filter
-        if (subjectFilter && !cardSubject.includes(subjectFilter)) {
-            show = false;
-        }
-
-        // Apply grade filter
-        if (gradeFilter && cardGrade !== gradeFilter) {
-            show = false;
-        }
-
-        // Apply rate filter
-        if (cardRate > rateFilter) {
-            show = false;
-        }
-
-        // Show or hide card
-        if (show) {
-            card.style.display = '';
-            visibleCount++;
-        } else {
-            card.style.display = 'none';
-        }
-    });
-
-    // Update result count
-    const resultCount = document.getElementById('resultCount');
-    if (resultCount) {
-        resultCount.textContent = visibleCount;
-    }
-}
-
-// ===================================
-// TUTOR SORTING (Tutors Page)
-// ===================================
-
-const sortBy = document.getElementById('sortBy');
-
-if (sortBy) {
-    sortBy.addEventListener('change', sortTutors);
-}
-
-function sortTutors() {
-    const sortValue = document.getElementById('sortBy')?.value;
-    const tutorGrid = document.getElementById('tutorGrid');
-    const tutorCards = Array.from(document.querySelectorAll('.tutor-card'));
-
-    tutorCards.sort((a, b) => {
-        const rateA = parseInt(a.getAttribute('data-rate'));
-        const rateB = parseInt(b.getAttribute('data-rate'));
-
-        switch (sortValue) {
-            case 'price-low':
-                return rateA - rateB;
-            case 'price-high':
-                return rateB - rateA;
-            case 'rating':
-                // Default order (already sorted by rating)
-                return 0;
-            case 'experience':
-                // Could add data-experience attribute for real sorting
-                return 0;
-            default:
-                return 0;
-        }
-    });
-
-    // Re-append sorted cards
-    tutorGrid.appendChild(card);
-    });
-}
-
-// ===================================
-// FORM VALIDATION (Become a Tutor)
-// ===================================
-
-const tutorApplicationForm = document.getElementById('tutorApplicationForm');
-
-if (tutorApplicationForm) {
-    // Pre-fill form if user is logged in
-    if (typeof auth !== 'undefined' && auth.isAuthenticated()) {
-        const user = auth.getUser();
-        if (user) {
-            if (user.name) document.getElementById('fullName').value = user.name;
-            if (user.email) document.getElementById('email').value = user.email;
-            if (user.phone) document.getElementById('phone').value = user.phone;
-            if (user.qualification) document.getElementById('qualification').value = user.qualification;
-            if (user.hourlyRate) document.getElementById('preferredRate').value = user.hourlyRate;
-        }
-    }
-
-    console.log('Tutor application form found, attaching listener');
-    tutorApplicationForm.addEventListener('submit', async function (e) {
-        e.preventDefault();
-        console.log('Submit button clicked');
-
-        // Get form elements by ID for reliability
-        const fullName = document.getElementById('fullName').value.trim();
-        const email = document.getElementById('email').value.trim();
-        const phone = document.getElementById('phone').value.trim();
-        const qualification = document.getElementById('qualification').value;
-        const experience = document.getElementById('experience').value;
-        const preferredRate = parseInt(document.getElementById('preferredRate').value);
-        const location = document.getElementById('location').value.trim();
-        const bio = document.getElementById('bio').value.trim();
-
-        // Validate Email
-        if (!isValidEmail(email)) {
-            alert('Please enter a valid email address.');
-            return;
-        }
-
-        // Validate Phone
-        if (!isValidPhone(phone)) {
-            console.log('Phone validation failed:', phone);
-            alert('Please enter a valid South African phone number (e.g., 0821234567 or +27821234567).');
-            return;
-        }
-
-        // Check if at least one subject is selected
-        const subjectCheckboxes = document.querySelectorAll('input[name="subjects"]:checked');
-        const formatCheckboxes = document.querySelectorAll('input[name="format"]:checked');
-
-        if (subjectCheckboxes.length === 0) {
-            alert('Please select at least one subject you can teach.');
-            return;
-        }
-
-        if (formatCheckboxes.length === 0) {
-            alert('Please select at least one teaching format (Online or In-Person).');
-            return;
-        }
-
-        const subjects = Array.from(subjectCheckboxes).map(cb => cb.value);
-        const teachingFormat = Array.from(formatCheckboxes).map(cb => cb.value);
-
-        // Validate Files (Size and Type)
-        const validateFile = (fileInput, fieldName) => {
-            const file = fileInput.files[0];
-            if (!file) return true; // Required check is handled by HTML
-
-            // Check size (5MB)
-            if (file.size > 5 * 1024 * 1024) {
-                console.log('File too large:', fieldName, file.size);
-                alert(`File for ${fieldName} is too large. Maximum size is 5MB.`);
-                return false;
+            
+            const submitBtn = tutorForm.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            
+            // Get values
+            const fullName = document.getElementById('fullName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            
+            if (!isValidEmail(email)) {
+                alert('Please enter a valid email address.');
+                return;
             }
-
-            // Check type (simple check)
-            const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'];
-            if (!validTypes.includes(file.type)) {
-                alert(`Invalid file type for ${fieldName}. Only JPG, PNG, WebP, and PDF are allowed.`);
-                return false;
+            
+            if (!isValidPhone(phone)) {
+                alert('Please enter a valid South African phone number.');
+                return;
             }
-            return true;
-        };
-
-        const profileImageInput = document.getElementById('profileImage');
-        const qualificationsDocInput = document.getElementById('qualificationsDoc');
-        const identityDocInput = document.getElementById('identityDoc');
-
-        if (!validateFile(profileImageInput, 'Profile Photo')) return;
-        if (!validateFile(qualificationsDocInput, 'Qualifications')) return;
-        if (!validateFile(identityDocInput, 'Identity Document')) return;
-
-        // Prepare application data using FormData for file upload
-        const formData = new FormData();
-        formData.append('fullName', fullName);
-        formData.append('email', email);
-        formData.append('phone', phone);
-        formData.append('qualification', qualification);
-        formData.append('experience', experience);
-        formData.append('preferredRate', preferredRate);
-        formData.append('location', location);
-        formData.append('bio', bio);
-
-        // Append array fields
-        subjects.forEach(subject => formData.append('subjects', subject));
-        teachingFormat.forEach(format => formData.append('teachingFormat', format));
-
-        // Append profile image
-        const profileImageFile = profileImageInput.files[0];
-        if (profileImageFile) {
-            formData.append('profileImage', profileImageFile);
-        }
-
-        // Append qualifications document
-        const qualificationsDocFile = qualificationsDocInput.files[0];
-        if (qualificationsDocFile) {
-            formData.append('qualificationsDoc', qualificationsDocFile);
-        }
-
-        // Append identity document
-        const identityDocFile = identityDocInput.files[0];
-        if (identityDocFile) {
-            formData.append('identityDoc', identityDocFile);
-        }
-
-        // Disable submit button and show loading state
-        const submitBtn = tutorApplicationForm.querySelector('button[type="submit"]');
-        const originalBtnText = submitBtn.innerHTML;
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = 'Submitting Application...';
-
-        try {
-            // Submit to API
-            // Using relative path to avoid hardcoded localhost if deployed elsewhere
-            // But falling back to absolute if needed (or assume proxy)
-            const response = await fetch(`${API_BASE}/applications`, {
-                method: 'POST',
-                body: formData // No Content-Type header needed, browser sets it for FormData
-            });
-
-            if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.error || 'Failed to submit application');
+            
+            // Show loading
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = 'Submitting...';
+            
+            try {
+                const formData = new FormData(tutorForm);
+                const response = await fetch(`${API_BASE}/applications`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (response.ok) {
+                    alert('Application submitted successfully! We will contact you soon.');
+                    tutorForm.reset();
+                } else {
+                    const error = await response.json();
+                    throw new Error(error.error || 'Failed to submit application');
+                }
+            } catch (err) {
+                alert('Error: ' + err.message);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
             }
-
-            const result = await response.json();
-
-            // If validation passes, show success message
-            alert('Application submitted successfully!\n\nThank you for applying to become a tutor with Minatty Learning Hub.\n\nOur team will review your application and contact you within 3-5 business days.\n\nNext steps:\n1. Application review\n2. Document verification\n3. Background check\n4. Interview\n5. Approval & onboarding');
-
-            // Reset form
-            tutorApplicationForm.reset();
-            // Reset custom dropdown trigger text
-            if (subjectDropdown) {
-                const trigger = subjectDropdown.querySelector('.dropdown-trigger');
-                trigger.textContent = 'Select subjects...';
-                trigger.style.color = 'var(--color-text-muted)';
-            }
-        } catch (error) {
-            console.error('Error submitting application:', error);
-            alert('Submission Failed: ' + error.message + '\n\nPlease try again. If the issue persists, ensure your file sizes are under 5MB and check your internet connection.');
-        } finally {
-            // Re-enable button
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = originalBtnText;
-        }
-    });
-}
-
-// ===================================
-// LOAD MORE BUTTON (Tutors Page)
-// ===================================
-
-const loadMoreBtn = document.querySelector('.section button.btn-outline');
-
-if (loadMoreBtn && loadMoreBtn.textContent.includes('Load More')) {
-    loadMoreBtn.addEventListener('click', function () {
-        alert('In a real application, this would load more tutor profiles from the server.\n\nFeatures would include:\n- Pagination\n- Infinite scroll\n- More tutor cards loaded dynamically');
-    });
-}
-
-// ===================================
-// URL PARAMETER HANDLING (Auto-filter)
-// ===================================
-
-// Check for URL parameters and auto-apply filters
-const urlParams = new URLSearchParams(window.location.search);
-
-if (urlParams.has('subject')) {
-    const subjectSelect = document.getElementById('filterSubject');
-    if (subjectSelect) {
-        subjectSelect.value = urlParams.get('subject');
+        });
     }
-}
-
-if (urlParams.has('grade')) {
-    const gradeSelect = document.getElementById('filterGrade');
-    if (gradeSelect) {
-        gradeSelect.value = urlParams.get('grade');
-    }
-}
-
-// Auto-apply filters if parameters exist
-if ((urlParams.has('subject') || urlParams.has('grade')) && applyFiltersBtn) {
-    filterTutors();
-}
-
-// ===================================
-// CARD HOVER EFFECTS
-// ===================================
-
-const cards = document.querySelectorAll('.card');
-
-cards.forEach(card => {
-    card.addEventListener('mouseenter', function () {
-        this.style.borderColor = 'var(--color-primary-light)';
-    });
-
-    card.addEventListener('mouseleave', function () {
-        this.style.borderColor = 'var(--color-border-light)';
-    });
 });
 
 // ===================================
 // UTILITY FUNCTIONS
 // ===================================
 
-// Debounce function for performance
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
-}
-
-// Format currency
-function formatCurrency(amount) {
-    return 'R' + amount.toFixed(0);
-}
-
-// Validate email
 function isValidEmail(email) {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
 }
 
-// Validate phone number (South African format)
 function isValidPhone(phone) {
+    // Basic South African phone validation
     const re = /^(\+27|0)[0-9]{9}$/;
     return re.test(phone.replace(/\s/g, ''));
+}
+
+function formatCurrency(amount) {
+    return 'R' + amount.toFixed(0);
 }
