@@ -111,6 +111,7 @@ app.get('/api/health', (req, res) => {
             MONGODB_URI: process.env.MONGODB_URI ? '✅ set' : '❌ MISSING',
             JWT_SECRET: process.env.JWT_SECRET ? '✅ set' : '❌ MISSING',
             ADMIN_PASSWORD: process.env.ADMIN_PASSWORD ? '✅ set' : '❌ MISSING',
+            CLOUDINARY_URL: process.env.CLOUDINARY_URL ? '✅ set' : '❌ MISSING (Optional but recommended for images)',
             PORT: process.env.PORT || '(default 5000)'
         },
         timestamp: new Date().toISOString()
@@ -128,6 +129,11 @@ app.use((err, req, res, next) => {
     console.error(err.stack);
     if (err.message === 'Only images and PDFs are allowed') {
         return res.status(400).json({ error: err.message });
+    }
+    // Cloudinary/Multer errors
+    if (err.message && err.message.includes('Cloudinary')) {
+        console.error('☁️ Cloudinary Error:', err);
+        return res.status(500).json({ error: 'Image upload failed. Please check Cloudinary configuration.' });
     }
     // Multer size error
     if (err.code === 'LIMIT_FILE_SIZE') {
