@@ -1,6 +1,6 @@
-const _isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-const API_BASE = _isLocal ? 'http://localhost:5000/api' : 'https://minatty-website.onrender.com/api';
-window.API_BASE = API_BASE; // Make globally accessible to other scripts
+var _isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+var API_BASE = _isLocal ? 'http://localhost:5000/api' : 'https://minatty-website.onrender.com/api';
+window.API_BASE = API_BASE;
 
 // ===================================
 // TUTORING WEBSITE - JAVASCRIPT

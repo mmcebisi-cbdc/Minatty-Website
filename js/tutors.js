@@ -199,7 +199,7 @@ function renderTutors(tutors) {
                     ${(typeof auth !== 'undefined' && auth.getUser() && auth.getUser().role === 'admin') ?
                 `<button class="btn btn-reject" style="padding: 8px 15px; background-color: #ef4444; color: white; border: none; border-radius: 6px; cursor: pointer;" onclick="deleteTutor('${tutor._id}')">Delete</button>` : ''
             }
-                     <a href="profile.html?id=${tutor._id}" class="btn btn-outline" style="padding: 8px 15px; text-decoration: none;" onclick="console.log('View Profile clicked for ID:', '${tutor._id}'); window.location.href='profile.html?id=${tutor._id}'; return false;">View Profile</a>
+                     <a href="profile.html?id=${tutor._id}" class="btn btn-outline" style="padding: 8px 15px; text-decoration: none;">View Profile</a>
                     ${(typeof auth !== 'undefined' && auth.getUser() && auth.getUser().role === 'tutor') ? '' :
                 `<button class="btn btn-primary" onclick="openBookingModal('${tutor._id}', '${safeName}', '${safeSubjects}', ${tutor.hourlyRate || 0})">Book Session</button>`
             }

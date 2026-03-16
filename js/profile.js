@@ -17,7 +17,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 async function loadTutorProfile(tutorId) {
-    const response = await fetch(`${API_BASE}/tutors/${tutorId}`);
+    const apiBase = (typeof API_BASE !== 'undefined') ? API_BASE : window.API_BASE;
+    if (!apiBase) throw new Error("API_BASE is not defined. Check app.js loading.");
+
+    const response = await fetch(`${apiBase}/tutors/${tutorId}`);
     if (!response.ok) throw new Error(`Failed to fetch tutor: ${response.status}`);
 
     const tutor = await response.json();
