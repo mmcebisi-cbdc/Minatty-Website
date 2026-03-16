@@ -135,6 +135,47 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // ===================================
+    // CUSTOM MULTI-SELECT DROPDOWN
+    // ===================================
+    const subjectDropdown = document.getElementById('subjectDropdown');
+    if (subjectDropdown) {
+        const trigger = subjectDropdown.querySelector('.dropdown-trigger');
+        const checkboxes = subjectDropdown.querySelectorAll('input[type="checkbox"]');
+
+        trigger.addEventListener('click', function (e) {
+            e.stopPropagation();
+            subjectDropdown.classList.toggle('active');
+        });
+
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function () {
+                updateDropdownText();
+            });
+        });
+
+        function updateDropdownText() {
+            const selected = Array.from(checkboxes)
+                .filter(cb => cb.checked)
+                .map(cb => cb.parentElement.textContent.trim());
+
+            if (selected.length === 0) {
+                trigger.textContent = 'Select subjects...';
+            } else if (selected.length <= 2) {
+                trigger.textContent = selected.join(', ');
+            } else {
+                trigger.textContent = `${selected.length} subjects selected`;
+            }
+        }
+
+        // Close when clicking outside
+        document.addEventListener('click', function (e) {
+            if (!subjectDropdown.contains(e.target)) {
+                subjectDropdown.classList.remove('active');
+            }
+        });
+    }
+
+    // ===================================
     // FAQ ACCORDION
     // ===================================
     document.body.addEventListener('click', (e) => {

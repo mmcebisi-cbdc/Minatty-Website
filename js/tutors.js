@@ -128,7 +128,13 @@ function renderTutors(tutors) {
         if (tutor.profileImage) {
             // Robust base URL derivation (handles /api or /api/)
             const baseUrl = API_BASE.split('/api')[0];
-            const imageUrl = tutor.profileImage.startsWith('/uploads') ? `${baseUrl}${tutor.profileImage}` : tutor.profileImage;
+            let imageUrl = tutor.profileImage;
+            
+            if (imageUrl && !imageUrl.startsWith('http')) {
+                // Ensure there's a leading slash for concatenation
+                const path = imageUrl.startsWith('/') ? imageUrl : `/${imageUrl}`;
+                imageUrl = `${baseUrl}${path}`;
+            }
 
             // Use onerror to handle 404/400 errors
             profileHtml = `<img src="${imageUrl}" alt="${tutor.fullName}"
