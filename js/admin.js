@@ -95,13 +95,7 @@ async function fetchApplications() {
                 ? app.subjects.join(', ')
                 : (app.subjects || 'No subjects');
 
-            const getFileUrl = (path) => {
-                if (!path) return '';
-                if (path.startsWith('http')) return path;
-                const base = isLocal ? 'http://localhost:5000' : 'https://minatty-website.onrender.com';
-                if (path.startsWith('/uploads')) return `${base}${path}`;
-                return `${base}/uploads/${path}`;
-            };
+            const getFileUrl = (path) => window.getTutorImageUrl(path);
 
             const profileUrl = getFileUrl(app.profileImage);
             const qualUrl = getFileUrl(app.qualificationsDoc);

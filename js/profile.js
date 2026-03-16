@@ -40,10 +40,7 @@ async function loadTutorProfile(tutorId) {
     const placeholderHtml = `<div class="profile-image-large" style="background: rgba(255,255,255,0.25); display: flex; align-items: center; justify-content: center; color: white; font-size: 2.5rem; font-weight: 700;">${initials}</div>`;
 
     if (tutor.profileImage) {
-        const baseUrl = (typeof API_BASE !== 'undefined') ? API_BASE.split('/api')[0] : '';
-        const imageUrl = tutor.profileImage.startsWith('/uploads')
-            ? `${baseUrl}${tutor.profileImage}`
-            : tutor.profileImage;
+        const imageUrl = window.getTutorImageUrl(tutor.profileImage);
 
         imgContainer.innerHTML = `<img src="${imageUrl}" alt="${tutor.fullName}" class="profile-image-large"
             onerror="this.onerror=null; this.parentNode.innerHTML='${placeholderHtml.replace(/'/g, "\\'")}'">`;

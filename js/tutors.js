@@ -126,15 +126,7 @@ function renderTutors(tutors) {
         let profileHtml = '<div class="profile-placeholder" style="width: 80px; height: 80px; border-radius: 50%; background-color: #e2e8f0; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #64748b;">' + (tutor.fullName ? tutor.fullName.charAt(0).toUpperCase() : '?') + '</div>';
 
         if (tutor.profileImage) {
-            // Robust base URL derivation (handles /api or /api/)
-            const baseUrl = API_BASE.split('/api')[0];
-            let imageUrl = tutor.profileImage;
-            
-            if (imageUrl && !imageUrl.startsWith('http')) {
-                // Ensure there's a leading slash for concatenation
-                const path = imageUrl.startsWith('/') ? imageUrl : `/${imageUrl}`;
-                imageUrl = `${baseUrl}${path}`;
-            }
+            const imageUrl = window.getTutorImageUrl(tutor.profileImage);
 
             // Use onerror to handle 404/400 errors
             profileHtml = `<img src="${imageUrl}" alt="${tutor.fullName}"

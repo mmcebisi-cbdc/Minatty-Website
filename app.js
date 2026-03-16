@@ -2,6 +2,26 @@ var _isLocal = window.location.hostname === 'localhost' || window.location.hostn
 var API_BASE = _isLocal ? 'http://localhost:5000/api' : 'https://minatty-website.onrender.com/api';
 window.API_BASE = API_BASE;
 
+/**
+ * Robust helper to get the full URL for a tutor image or document.
+ * Handles local paths, Cloudinary URLs, and corrects localhost URLs in production.
+ */
+window.getTutorImageUrl = function(path) {
+    if (!path) return '';
+    if (path.startsWith('http')) {
+        // If we are on production but the path points to localhost (common DB legacy), swap it
+        if (!_isLocal && path.includes('localhost:5000')) {
+            return path.replace('http://localhost:5000', 'https://minatty-website.onrender.com');
+        }
+        return path; // Already a full URL (Cloudinary or corrected)
+    }
+    
+    // For relative paths like "/uploads/..." or "uploads/..."
+    const cleanPath = path.startsWith('/') ? path : `/${path}`;
+    const baseUrl = API_BASE.split('/api')[0];
+    return `${baseUrl}${cleanPath}`;
+};
+
 // ===================================
 // TUTORING WEBSITE - JAVASCRIPT
 // Math & Physical Science
