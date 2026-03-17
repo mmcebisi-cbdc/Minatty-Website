@@ -29,6 +29,7 @@ function checkAuth() {
         loginContainer.style.display = 'none';
         dashboardContent.style.display = 'block';
         fetchApplications();
+        fetchRegisteredTutors();
         fetchBookings();
         fetchUsers();
         fetchMessages();
@@ -164,6 +165,76 @@ async function fetchApplications() {
 }
 window.fetchApplications = fetchApplications;
 
+async function fetchRegisteredTutors() {
+    const container = document.getElementById('registeredTutorsList');
+    if (!container) return;
+    container.innerHTML = 'Loading...';
+
+    try {
+        const res = await fetch(`${API_BASE}/tutors`);
+        if (!res.ok) throw new Error('Failed to fetch tutors');
+        const tutors = await res.json();
+
+        if (!tutors || tutors.length === 0) {
+            container.innerHTML = '<p>No registered tutors found.</p>';
+            return;
+        }
+
+        container.innerHTML = tutors.map(tutor => {
+            const profileUrl = window.getTutorImageUrl(tutor.profileImage);
+            const profilePhoto = profileUrl
+                ? `<img src="${profileUrl}" alt="Profile" style="width:50px;height:50px;border-radius:50%;object-fit:cover;margin-right:15px;">`
+                : `<div style="width:50px;height:50px;border-radius:50%;background:#eee;margin-right:15px;display:flex;align-items:center;justify-content:center;">👤</div>`;
+
+            return `
+            <div class="item-card">
+                <div class="item-header">
+                    <div style="display:flex;align-items:center;">
+                        ${profilePhoto}
+                        <div>
+                            <h3>${tutor.fullName}</h3>
+                            <p class="text-muted">${tutor.email} | ${tutor.phone}</p>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="status-badge status-approved">${(tutor.status || 'approved').toUpperCase()}</span>
+                        ${tutor.verified ? '<span class="status-badge" style="background:#dbeafe;color:#1e40af;margin-left:5px;">VERIFIED</span>' : ''}
+                    </div>
+                </div>
+                <div style="margin-bottom:15px;">
+                    <p><strong>Subjects:</strong> ${(tutor.subjects || []).join(', ')}</p>
+                    <p><strong>Qualification:</strong> ${tutor.qualification || 'N/A'}</p>
+                    <p><strong>Experience:</strong> ${tutor.experience || 'N/A'} years</p>
+                    <p><strong>Rate:</strong> R${tutor.hourlyRate || 0}/hr</p>
+                </div>
+                <div>
+                     <button class="action-btn btn-reject" onclick="deleteTutorFromAdmin('${tutor._id}')">Delete Profile</button>
+                     <a href="profile.html?id=${tutor._id}" target="_blank" class="action-btn" style="background:#3b82f6;color:white;text-decoration:none;">View Profile</a>
+                </div>
+            </div>`;
+        }).join('');
+
+    } catch (error) {
+        console.error('Error fetching registered tutors:', error);
+        container.innerHTML = `<p style="color:red;">Error loading tutors: ${error.message}</p>`;
+    }
+}
+window.fetchRegisteredTutors = fetchRegisteredTutors;
+
+async function deleteTutorFromAdmin(id) {
+    if (!confirm('Are you sure you want to DELETE this tutor profile and their user account?')) return;
+    try {
+        const res = await fetch(`${API_BASE}/tutors/${id}`, { method: 'DELETE' });
+        if (!res.ok) throw new Error('Delete failed');
+        alert('Tutor profile deleted successfully');
+        fetchRegisteredTutors();
+        fetchUsers(); // Refresh users list too
+    } catch (error) {
+        alert('Error deleting tutor: ' + error.message);
+    }
+}
+window.deleteTutorFromAdmin = deleteTutorFromAdmin;
+
 async function deleteApplication(id) {
     if (!confirm('Are you sure you want to DELETE this application? This cannot be undone.')) return;
     try {
@@ -292,6 +363,7 @@ async function fetchUsers() {
                         <th style="padding:12px 15px;border-bottom:1px solid #ddd;">Name</th>
                         <th style="padding:12px 15px;border-bottom:1px solid #ddd;">Email</th>
                         <th style="padding:12px 15px;border-bottom:1px solid #ddd;">Phone</th>
+                        <th style="padding:12px 15px;border-bottom:1px solid #ddd;">Parent/Guardian</th>
                         <th style="padding:12px 15px;border-bottom:1px solid #ddd;">Role</th>
                         <th style="padding:12px 15px;border-bottom:1px solid #ddd;">Grade</th>
                         <th style="padding:12px 15px;border-bottom:1px solid #ddd;">Action</th>
@@ -304,6 +376,7 @@ async function fetchUsers() {
                 <td style="padding:12px 15px;border-bottom:1px solid #eee;">${user.name || '-'}</td>
                 <td style="padding:12px 15px;border-bottom:1px solid #eee;">${user.email}</td>
                 <td style="padding:12px 15px;border-bottom:1px solid #eee;">${user.phoneNumber || '-'}</td>
+                <td style="padding:12px 15px;border-bottom:1px solid #eee;">${user.parentGuardianNumber || '-'}</td>
                 <td style="padding:12px 15px;border-bottom:1px solid #eee;">
                     <span class="status-badge" style="background:${user.role === 'student' ? '#e0f2fe' : '#fef3c7'};color:${user.role === 'student' ? '#0369a1' : '#d97706'};">
                         ${(user.role || 'student').toUpperCase()}

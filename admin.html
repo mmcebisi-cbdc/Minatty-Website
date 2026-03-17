@@ -156,7 +156,8 @@
             </div>
 
             <div class="tabs">
-                <button class="tab-btn active" onclick="switchTab('applications')">Registered Tutors</button>
+                <button class="tab-btn active" onclick="switchTab('applications')">Applications</button>
+                <button class="tab-btn" onclick="switchTab('registeredTutors')">Registered Tutors</button>
                 <button class="tab-btn" onclick="switchTab('bookings')">Bookings</button>
                 <button class="tab-btn" onclick="switchTab('users')">All Users</button>
                 <button class="tab-btn" onclick="switchTab('messages')">📩 Messages</button>
@@ -165,6 +166,11 @@
             <!-- APPLICATIONS SECTION -->
             <div id="applications" class="section-content active">
                 <div id="applicationsList"></div>
+            </div>
+
+            <!-- REGISTERED TUTORS SECTION -->
+            <div id="registeredTutors" class="section-content">
+                <div id="registeredTutorsList"></div>
             </div>
 
             <!-- BOOKINGS SECTION -->

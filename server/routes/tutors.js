@@ -9,7 +9,7 @@ router.get('/', async (req, res) => {
     try {
         const { subject, grade, format, minRate, maxRate, location, sortBy } = req.query;
 
-        let query = { status: 'approved' };
+        let query = { $or: [{ status: 'approved' }, { verified: true }] };
 
         // Apply filters
         console.log('GET /api/tutors query params:', req.query);
