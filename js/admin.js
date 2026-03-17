@@ -66,10 +66,35 @@ function logoutAdmin() {
 }
 
 function switchTab(tabId) {
+    console.log('Switching to tab:', tabId);
+    
+    // Hide all sections
     document.querySelectorAll('.section-content').forEach(el => el.classList.remove('active'));
+    // Deactivate all buttons
     document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-    document.getElementById(tabId).classList.add('active');
-    document.querySelector(`button[onclick="switchTab('${tabId}')"]`).classList.add('active');
+    
+    // Show target section
+    const targetSection = document.getElementById(tabId);
+    if (targetSection) {
+        targetSection.classList.add('active');
+    } else {
+        console.error('Section not found:', tabId);
+    }
+    
+    // Activate target button - more robust way to find the button
+    const buttons = document.querySelectorAll('.tab-btn');
+    buttons.forEach(btn => {
+        if (btn.getAttribute('onclick')?.includes(`'${tabId}'`)) {
+            btn.classList.add('active');
+        }
+    });
+
+    // Refresh data for the active tab (optional but good for UX)
+    if (tabId === 'applications') fetchApplications();
+    if (tabId === 'registeredTutors') fetchRegisteredTutors();
+    if (tabId === 'bookings') fetchBookings();
+    if (tabId === 'users') fetchUsers();
+    if (tabId === 'messages') fetchMessages();
 }
 window.switchTab = switchTab;
 
