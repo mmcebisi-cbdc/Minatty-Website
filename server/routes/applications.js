@@ -76,12 +76,6 @@ router.post('/', upload.fields([
             bio
         } = req.body;
 
-        // Check if application already exists
-        const existingApp = await Application.findOne({ email });
-        if (existingApp) {
-            return res.status(400).json({ error: 'Application with this email already exists' });
-        }
-
         // Parse array fields if they come as strings (from FormData)
         let parsedSubjects = subjects;
         if (typeof subjects === 'string') {
@@ -111,33 +105,61 @@ router.post('/', upload.fields([
         const qualificationsDoc = getFilePath(req.files['qualificationsDoc']);
         const identityDoc = getFilePath(req.files['identityDoc']);
 
-        // Create new application
-        const application = new Application({
-            fullName,
-            email,
-            phone,
-            qualification,
-            subjects: parsedSubjects,
-            experience,
-            preferredRate,
-            location,
-            teachingFormat: parsedFormat,
-            workExperience,
-            bio,
-            profileImage,
-            qualificationsDoc,
-            identityDoc
-        });
+        // Check if application already exists
+        let application = await Application.findOne({ email });
+        
+        if (application) {
+            console.log(`🔄 Updating existing application for ${email}`);
+            // Update fields
+            application.fullName = fullName;
+            application.phone = phone;
+            application.qualification = qualification;
+            application.subjects = parsedSubjects;
+            application.experience = experience;
+            application.preferredRate = preferredRate;
+            application.location = location;
+            application.teachingFormat = parsedFormat;
+            application.workExperience = workExperience;
+            application.bio = bio;
+            if (profileImage) application.profileImage = profileImage;
+            if (qualificationsDoc) application.qualificationsDoc = qualificationsDoc;
+            if (identityDoc) application.identityDoc = identityDoc;
+            application.status = 'pending'; // Reset to pending if re-applied
+        } else {
+            console.log(`➕ Creating new application for ${email}`);
+            // Create new application
+            application = new Application({
+                fullName,
+                email,
+                phone,
+                qualification,
+                subjects: parsedSubjects,
+                experience,
+                preferredRate,
+                location,
+                teachingFormat: parsedFormat,
+                workExperience,
+                bio,
+                profileImage,
+                qualificationsDoc,
+                identityDoc
+            });
+        }
 
         await application.save();
+        console.log('✅ Application saved successfully');
 
         res.status(201).json({
-            message: 'Application submitted successfully!',
+            message: application.__v > 0 ? 'Application updated successfully!' : 'Application submitted successfully!',
             applicationId: application._id
         });
     } catch (err) {
-        console.error('Error submitting application:', err);
-        res.status(500).json({ error: err.message });
+        console.error('❌ Error submitting application:', err);
+        // Provide more descriptive error if it's a Mongoose validation error
+        if (err.name === 'ValidationError') {
+            return res.status(400).json({ error: 'Validation Error: ' + Object.values(err.errors).map(e => e.message).join(', ') });
+        }
+        res.status(500).json({ error: err.message || 'Internal Server Error' });
     }
 });
 
