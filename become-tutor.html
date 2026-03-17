@@ -375,31 +375,31 @@
                 <form id="tutorApplicationForm">
                     <div class="form-group">
                         <label class="form-label">Full Name *</label>
-                        <input type="text" id="fullName" class="form-input" required placeholder="Enter your full name"
+                        <input type="text" id="fullName" name="fullName" class="form-input" required placeholder="Enter your full name"
                             autocomplete="name">
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">Email Address *</label>
-                        <input type="email" id="email" class="form-input" required placeholder="your.email@example.com"
+                        <input type="email" id="email" name="email" class="form-input" required placeholder="your.email@example.com"
                             autocomplete="email">
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">Profile Photo *</label>
-                        <input type="file" id="profileImage" class="form-input" required
+                        <input type="file" id="profileImage" name="profileImage" class="form-input" required
                             accept="image/png, image/jpeg, image/webp" autocomplete="off">
                         <small class="text-muted">Please upload a professional photo (JPG, PNG, WebP). Max 5MB.</small>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">Phone Number *</label>
-                        <input type="tel" id="phone" class="form-input" required placeholder="+27 XX XXX XXXX"
+                        <input type="tel" id="phone" name="phone" class="form-input" required placeholder="+27 XX XXX XXXX"
                             autocomplete="tel">
                     </div>
 
                     <div class="form-group">
-                        <select id="qualification" class="form-select" required autocomplete="off">
+                        <select id="qualification" name="qualification" class="form-select" required autocomplete="off">
                             <option value="">Select your qualification</option>
                             <option value="bachelors">Bachelor's Degree</option>
                             <option value="honours">Honours Degree</option>
@@ -412,14 +412,14 @@
 
                     <div class="form-group">
                         <label class="form-label">Upload Qualifications (PDF/Image) *</label>
-                        <input type="file" id="qualificationsDoc" class="form-input" required
+                        <input type="file" id="qualificationsDoc" name="qualificationsDoc" class="form-input" required
                             accept="image/png, image/jpeg, image/webp, application/pdf" autocomplete="off">
                         <small class="text-muted">Degree, Transcript, or Certificate.</small>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">Upload Identity Document (PDF/Image) *</label>
-                        <input type="file" id="identityDoc" class="form-input" required
+                        <input type="file" id="identityDoc" name="identityDoc" class="form-input" required
                             accept="image/png, image/jpeg, image/webp, application/pdf" autocomplete="off">
                         <small class="text-muted">ID Copy, Passport, or Driver's License.</small>
                     </div>
@@ -489,7 +489,7 @@
 
                     <div class="form-group">
                         <label class="form-label">Years of Teaching Experience *</label>
-                        <select id="experience" class="form-select" required autocomplete="off">
+                        <select id="experience" name="experience" class="form-select" required autocomplete="off">
                             <option value="">Select experience level</option>
                             <option value="0-1">Less than 1 year</option>
                             <option value="1-3">1-3 years</option>
@@ -500,20 +500,20 @@
 
                     <div class="form-group">
                         <label class="form-label">Relevant Work Experience</label>
-                        <textarea id="workExperience" class="form-textarea"
+                        <textarea id="workExperience" name="workExperience" class="form-textarea"
                             placeholder="Briefly describe your relevant teaching or tutoring experience..."
                             autocomplete="off"></textarea>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">Preferred Hourly Rate (ZAR) *</label>
-                        <input type="number" id="preferredRate" class="form-input" required placeholder="e.g., 250"
+                        <input type="number" id="preferredRate" name="preferredRate" class="form-input" required placeholder="e.g., 250"
                             min="100" max="500" autocomplete="off">
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">City/Location *</label>
-                        <input type="text" id="location" class="form-input" required placeholder="e.g., Johannesburg"
+                        <input type="text" id="location" name="location" class="form-input" required placeholder="e.g., Johannesburg"
                             autocomplete="address-level2">
                     </div>
 
@@ -522,11 +522,11 @@
                         <div
                             style="display: flex; flex-direction: column; gap: var(--space-2); margin-top: var(--space-2);">
                             <label style="display: flex; align-items: center; gap: var(--space-2); cursor: pointer;">
-                                <input type="checkbox" name="format" value="online">
+                                <input type="checkbox" name="teachingFormat" value="online">
                                 <span>Online Tutoring</span>
                             </label>
                             <label style="display: flex; align-items: center; gap: var(--space-2); cursor: pointer;">
-                                <input type="checkbox" name="format" value="in-person">
+                                <input type="checkbox" name="teachingFormat" value="in-person">
                                 <span>In-Person Tutoring</span>
                             </label>
                         </div>
@@ -534,7 +534,7 @@
 
                     <div class="form-group">
                         <label class="form-label">Tell Us About Yourself *</label>
-                        <textarea id="bio" class="form-textarea" required
+                        <textarea id="bio" name="bio" class="form-textarea" required
                             placeholder="Share your teaching philosophy, experience with students, and what makes you a great tutor..."
                             autocomplete="off"></textarea>
                     </div>
