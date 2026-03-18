@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', async () => {
+async function initProfilePage() {
     const urlParams = new URLSearchParams(window.location.search);
     const tutorId = urlParams.get('id');
 
@@ -14,7 +14,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error('Error loading profile:', error);
         document.getElementById('loading').innerHTML = '<p style="color: red; text-align: center;">Failed to load profile. <a href="tutors.html">Go back to tutors</a>.</p>';
     }
-});
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initProfilePage);
+} else {
+    initProfilePage();
+}
 
 async function loadTutorProfile(tutorId) {
     const apiBase = (typeof API_BASE !== 'undefined') ? API_BASE : window.API_BASE;
@@ -41,9 +47,10 @@ async function loadTutorProfile(tutorId) {
 
     if (tutor.profileImage) {
         const imageUrl = window.getTutorImageUrl(tutor.profileImage);
+        const safePlaceholder = placeholderHtml.replace(/'/g, "\\'").replace(/"/g, "&quot;");
 
         imgContainer.innerHTML = `<img src="${imageUrl}" alt="${tutor.fullName}" class="profile-image-large"
-            onerror="this.onerror=null; this.parentNode.innerHTML='${placeholderHtml.replace(/'/g, "\\'")}'">`;
+            onerror="this.onerror=null; this.parentNode.innerHTML='${safePlaceholder}'">`;
     } else {
         imgContainer.innerHTML = placeholderHtml;
     }

@@ -604,7 +604,7 @@ window.submitBooking = async function (finalData) {
         // Update trial user status logic removed (profiles API not currently built out in local repo)
         // Can be added later when unified user profiles are implemented locally.
 
-        alert('Booking confirmed successfully!');
+        alert('Booking confirmed successfully! You have booked a lesson with ' + tutorName + '.');
         closeBookingModal();
     } catch (error) {
         console.error('Error booking:', error);
