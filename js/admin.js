@@ -3,9 +3,6 @@
  * Admin auth: password verified against server .env ADMIN_PASSWORD
  */
 
-const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-const API_BASE = isLocal ? 'http://localhost:5000/api' : 'https://minatty-website.onrender.com/api';
-
 document.addEventListener('DOMContentLoaded', () => {
     checkAuth();
 
