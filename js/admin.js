@@ -313,7 +313,7 @@ async function fetchBookings() {
                     <span class="status-badge status-${booking.status || 'pending'}">${(booking.status || 'pending').toUpperCase()}</span>
                 </div>
                 <div style="margin-bottom:15px;">
-                    <p><strong>Tutor:</strong> ${booking.tutorName || booking.tutor_name || 'N/A'}</p>
+                    <p><strong>Tutor:</strong> ${(booking.tutor && booking.tutor.fullName) ? booking.tutor.fullName : (booking.tutorName || booking.tutor_name || 'N/A')}</p>
                     <p><strong>Date:</strong> ${booking.date ? new Date(booking.date).toLocaleString() : 'N/A'}</p>
                     <p><strong>Message:</strong> ${booking.message || 'No message'}</p>
                     <p><strong>Payment:</strong> ${booking.paymentStatus || booking.payment_status || 'N/A'}</p>
