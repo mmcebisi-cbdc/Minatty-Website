@@ -500,6 +500,70 @@
         </div>
     </footer>
 
+    <!-- June Study Camp 2026 Popup Funnel -->
+    <div id="campModalOverlay" class="camp-modal-overlay">
+        <!-- Step 1: Awareness (Hook) -->
+        <div id="campStep1" class="camp-modal-step camp-step-1">
+            <h2 class="camp-headline">🔥 June Study Camp 2026</h2>
+            <p class="camp-subheading">Boost your grades this winter holiday with expert tutors</p>
+            <ul class="camp-benefits">
+                <li><span class="camp-check">✓</span> Small group sessions</li>
+                <li><span class="camp-check">✓</span> Exam-focused revision</li>
+                <li><span class="camp-check">✓</span> Safe, supportive environment</li>
+            </ul>
+            <div class="camp-cta-group">
+                <button id="campRegisterBtn" class="camp-btn-primary">Register Now</button>
+                <button id="campLearnMoreBtn" class="camp-btn-secondary" onclick="document.getElementById('campModalOverlay').classList.remove('active')">Not Right Now</button>
+            </div>
+            <button class="camp-close-btn" aria-label="Close" onclick="document.getElementById('campModalOverlay').classList.remove('active')">&times;</button>
+        </div>
+
+        <!-- Step 2: Registration (Conversion) -->
+        <div id="campStep2" class="camp-modal-step camp-step-2" style="display: none;">
+            <button class="camp-close-btn camp-close-dark" aria-label="Close" onclick="document.getElementById('campModalOverlay').classList.remove('active')">&times;</button>
+            <div class="camp-progress">Step 2 of 2</div>
+            <h3 class="camp-form-title">Secure Your Spot</h3>
+            <p class="camp-form-subtitle">Fill in your details below to register.</p>
+            
+            <form id="campRegistrationForm" class="camp-form">
+                <div class="camp-form-row">
+                    <div class="camp-form-group">
+                        <label for="campFirstName">Name <span style="color:red">*</span></label>
+                        <input type="text" id="campFirstName" required placeholder="Student's Name">
+                    </div>
+                    <div class="camp-form-group">
+                        <label for="campLastName">Surname <span style="color:red">*</span></label>
+                        <input type="text" id="campLastName" required placeholder="Student's Surname">
+                    </div>
+                </div>
+                <div class="camp-form-group">
+                    <label for="campStudentContact">Student Contact (Phone/Email)</label>
+                    <input type="text" id="campStudentContact" placeholder="e.g. 082 123 4567 or email@domain.com">
+                </div>
+                <div class="camp-form-group">
+                    <label for="campParentName">Parent/Guardian Name <span style="color:red">*</span></label>
+                    <input type="text" id="campParentName" required placeholder="Parent's Full Name">
+                </div>
+                <div class="camp-form-group">
+                    <label for="campParentContact">Parent/Guardian Contact <span style="color:red">*</span></label>
+                    <input type="text" id="campParentContact" required placeholder="Phone or Email">
+                </div>
+                
+                <button type="submit" class="camp-btn-submit" id="campSubmitBtn">Secure Your Spot</button>
+                <p class="camp-urgency">⏳ Limited spaces available</p>
+            </form>
+        </div>
+
+        <!-- Step 3: Success Message -->
+        <div id="campStep3" class="camp-modal-step camp-step-3" style="display: none;">
+            <button class="camp-close-btn camp-close-dark" aria-label="Close" onclick="document.getElementById('campModalOverlay').classList.remove('active')">&times;</button>
+            <div class="camp-success-icon">✅</div>
+            <h3 class="camp-success-title">You’re registered!</h3>
+            <p class="camp-success-message">We’ll contact you soon with more details.</p>
+            <button class="camp-btn-secondary" style="margin-top: 20px; width: 100%; border-color: #cbd5e1; color: #475569;" onclick="document.getElementById('campModalOverlay').classList.remove('active')">Close</button>
+        </div>
+    </div>
+
     <script src="app.js?v=4"></script>
     <script type="module" src="js/auth.js?v=4"></script>
 </body>

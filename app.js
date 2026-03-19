@@ -280,3 +280,110 @@ function isValidPhone(phone) {
 function formatCurrency(amount) {
     return 'R' + amount.toFixed(0);
 }
+
+// ===================================
+// JUNE STUDY CAMP POPUP FUNNEL
+// ===================================
+document.addEventListener('DOMContentLoaded', () => {
+    const overlay = document.getElementById('campModalOverlay');
+    if (!overlay) return; // Only execute on pages where the modal HTML exists (index.html)
+
+    const step1 = document.getElementById('campStep1');
+    const step2 = document.getElementById('campStep2');
+    const step3 = document.getElementById('campStep3');
+    const registerBtn = document.getElementById('campRegisterBtn');
+    const form = document.getElementById('campRegistrationForm');
+    const submitBtn = document.getElementById('campSubmitBtn');
+    
+    // Check if already shown in this session
+    if (sessionStorage.getItem('campPopupShown') === 'true') {
+        return;
+    }
+
+    let popupTriggered = false;
+
+    function showPopup() {
+        if (popupTriggered) return;
+        popupTriggered = true;
+        sessionStorage.setItem('campPopupShown', 'true');
+        
+        // Reset sub-steps
+        step1.style.display = 'block';
+        step2.style.display = 'none';
+        step3.style.display = 'none';
+        
+        overlay.classList.add('active');
+    }
+
+    // Trigger 1: 4 seconds timer
+    setTimeout(showPopup, 4000);
+
+    // Trigger 2: 50% scroll depth
+    window.addEventListener('scroll', () => {
+        if (popupTriggered) return;
+        const scrollPercent = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+        if (scrollPercent >= 50) {
+            showPopup();
+        }
+    });
+
+    // Trigger 3: Exit intent (desktop only)
+    document.addEventListener('mouseleave', (e) => {
+        if (popupTriggered) return;
+        if (e.clientY < 0) {
+            showPopup();
+        }
+    });
+
+    // Step 1 to Step 2 transition
+    if (registerBtn) {
+        registerBtn.addEventListener('click', () => {
+            step1.style.display = 'none';
+            step2.style.display = 'block';
+        });
+    }
+
+    // Form Submission (Mock to Step 3)
+    if (form) {
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Gather data for real submit if needed
+            const formData = {
+                firstName: document.getElementById('campFirstName').value,
+                lastName: document.getElementById('campLastName').value,
+                studentContact: document.getElementById('campStudentContact').value,
+                parentName: document.getElementById('campParentName').value,
+                parentContact: document.getElementById('campParentContact').value,
+                subject: '[Study Camp 2026 Registration]',
+                message: 'Auto-submitted via popup funnel'
+            };
+
+            const originalText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = 'Submitting...';
+
+            try {
+                // Actually submit to the backend /api/contact endpoint (similar to how messages work)
+                await fetch(`${API_BASE}/contact`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: `${formData.firstName} ${formData.lastName} (Parent: ${formData.parentName})`,
+                        email: formData.parentContact, // Assuming email for general contact, or phone
+                        subject: formData.subject,
+                        message: `Student Contact: ${formData.studentContact}\nParent Contact: ${formData.parentContact}\n${formData.message}`
+                    })
+                });
+            } catch (err) {
+                console.warn('Backend submit failed, proceeding to success locally:', err);
+            }
+
+            // Move to Step 3
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalText;
+            step2.style.display = 'none';
+            step3.style.display = 'block';
+        });
+    }
+});
