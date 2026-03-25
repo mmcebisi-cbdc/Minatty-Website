@@ -916,6 +916,11 @@ button {
   color: var(--color-primary);
 }
 
+.btn-view-profile {
+  border: none;
+  cursor: pointer;
+}
+
 @keyframes slideInLeft {
   from {
     opacity: 0;

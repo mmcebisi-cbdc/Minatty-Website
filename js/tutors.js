@@ -1,5 +1,14 @@
 // We no longer import missing insforge.js SDK. Using local API instead.
 
+window.viewUserProfile = function(tutorId) {
+    if (!tutorId || tutorId === 'undefined') {
+        alert('Invalid tutor profile link.');
+        return;
+    }
+    // Wyzant logic: open full profile in a new tab so search state is maintained
+    window.open(`profile.html?id=${tutorId}`, '_blank');
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     // Allow public viewing of tutors
     // Auth checks are enforced on individual actions (booking, reviews)
@@ -227,9 +236,9 @@ function renderTutors(tutors) {
                     </div>
                 </div>
                 <div class="stats-actions">
-                    <a href="profile.html?id=${tutor._id}" class="btn-view-profile">
+                    <button type="button" onclick="viewUserProfile('${tutor._id}')" class="btn-view-profile">
                         View ${firstName}'s Profile
-                    </a>
+                    </button>
                     ${bookBtn}
                     ${deleteBtn}
                 </div>
