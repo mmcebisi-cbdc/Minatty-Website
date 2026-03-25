@@ -41,7 +41,7 @@ async function fetchTutors() {
     if (!tutorGrid) return; // Guard for pages without a tutor grid
 
     const resultCount = document.getElementById('resultCount');
-    tutorGrid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px;">Loading tutors...</div>';
+    tutorGrid.innerHTML = '<div style="text-align: center; padding: 40px;">Loading tutors...</div>';
 
     const subject = document.getElementById('filterSubject')?.value || '';
     const grade = document.getElementById('filterGrade')?.value || '';
@@ -93,7 +93,7 @@ async function fetchTutors() {
     } catch (error) {
         console.error('Error fetching tutors:', error);
         if (tutorGrid) {
-            tutorGrid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--color-error);">Failed to load tutors. Please try again later.</div>';
+            tutorGrid.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--color-error);">Failed to load tutors. Please try again later.</div>';
         }
     }
 }
@@ -109,98 +109,129 @@ function renderTutors(tutors) {
     tutorGrid.innerHTML = '';
 
     if (tutors.length === 0) {
-        tutorGrid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px;">No tutors found matching your criteria.</div>';
+        tutorGrid.innerHTML = '<div style="text-align: center; padding: 40px;">No tutors found matching your criteria.</div>';
         return;
     }
 
     tutors.forEach(tutor => {
         console.log('Creating card for:', tutor.fullName);
         const card = document.createElement('div');
-        card.className = 'card tutor-card';
-        // Add data attributes
+        card.className = 'tutor-card-hz';
         card.dataset.id = tutor._id;
         card.dataset.subject = (tutor.subjects || []).join(' ');
         card.dataset.grade = (tutor.gradeLevel || []).join(' ');
 
-        // Profile Image
-        let profileHtml = '<div class="profile-placeholder" style="width: 80px; height: 80px; border-radius: 50%; background-color: #e2e8f0; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #64748b;">' + (tutor.fullName ? tutor.fullName.charAt(0).toUpperCase() : '?') + '</div>';
+        // ── Avatar ──────────────────────────────────
+        const initials = tutor.fullName
+            ? tutor.fullName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()
+            : '??';
 
+        let avatarHtml;
         if (tutor.profileImage) {
             const imageUrl = window.getTutorImageUrl(tutor.profileImage);
-
-            // Use onerror to handle 404/400 errors
-            profileHtml = `<img src="${imageUrl}" alt="${tutor.fullName}"
-                style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;"
-                onerror="this.onerror=null; this.parentNode.innerHTML='<div style=\\'width: 80px; height: 80px; border-radius: 50%; background-color: #e2e8f0; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #64748b;\\'>${tutor.fullName ? tutor.fullName.charAt(0).toUpperCase() : '?'}</div>'">`;
+            avatarHtml = `<img src="${imageUrl}" alt="${tutor.fullName}"
+                onerror="this.onerror=null; this.outerHTML='<div class=\\'avatar-placeholder\\'>${initials}</div>'">`;
         } else {
-            const initials = tutor.fullName ? tutor.fullName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : '??';
-            profileHtml = `<div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--color-primary), var(--color-secondary)); display: flex; align-items: center; justify-content: center; color: white; font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold);">${initials}</div>`;
+            avatarHtml = `<div class="avatar-placeholder">${initials}</div>`;
         }
 
-        // Subjects badges
-        const subjectsHtml = (tutor.subjects || []).map(sub => {
-            return `<span class="badge">${formatSubject(sub)}</span>`;
-        }).join('');
+        // ── Subjects badges ─────────────────────────
+        const subjectsHtml = (tutor.subjects || []).map(sub =>
+            `<span class="badge">${formatSubject(sub)}</span>`
+        ).join('');
 
-        // Stars
-        const stars = '⭐'.repeat(Math.round(tutor.rating || 5));
+        // ── Stars ───────────────────────────────────
+        const rating = tutor.rating || 5;
+        const stars = '★'.repeat(Math.round(rating)) + '☆'.repeat(5 - Math.round(rating));
 
-        // Verified Badge
-        const verifiedBadge = tutor.verified === true ?
-            `<span class="badge badge-success" style="display: inline-flex; align-items: center; gap: 4px;">✓ Verified</span>` : '';
+        // ── Verified badge ──────────────────────────
+        const verifiedBadge = tutor.verified === true
+            ? `<span class="badge badge-success" style="display: inline-flex; align-items: center; gap: 4px;">✓ Verified</span>`
+            : '';
 
-        // Escape strings for onclick handler to prevent syntax errors with quotes
+        // ── First name for CTA ──────────────────────
+        const firstName = (tutor.fullName || 'Tutor').split(' ')[0];
+
+        // ── Qualification tagline ───────────────────
+        const qualText = tutor.qualification
+            ? `${tutor.qualification.charAt(0).toUpperCase() + tutor.qualification.slice(1)} • ${tutor.experience || '0'} years experience`
+            : `Tutor • ${tutor.experience || '0'} years experience`;
+
+        // ── Bio snippet ─────────────────────────────
+        const bioText = tutor.bio || 'No bio available.';
+        const bioSnippet = bioText.length > 180
+            ? bioText.substring(0, 180) + '...'
+            : bioText;
+
+        // ── Work experience excerpt ─────────────────
+        const workExpHtml = tutor.workExperience
+            ? `<p style="font-size: var(--font-size-xs); color: var(--color-primary); margin: 2px 0; font-weight: 500;">
+                  <i class="fas fa-briefcase" style="margin-right: 4px;"></i>${tutor.workExperience.length > 60 ? tutor.workExperience.substring(0, 60) + '...' : tutor.workExperience}
+               </p>`
+            : '';
+
+        // ── Escape strings for onclick ──────────────
         const safeName = (tutor.fullName || '').replace(/'/g, "\\'");
         const safeSubjects = (tutor.subjects || []).join(',').replace(/'/g, "\\'");
 
+        // ── Admin delete button ─────────────────────
+        const deleteBtn = (typeof auth !== 'undefined' && auth.getUser() && auth.getUser().role === 'admin')
+            ? `<button class="btn-delete-tutor" onclick="deleteTutor('${tutor._id}')">Delete</button>`
+            : '';
+
+        // ── Book Session button ─────────────────────
+        const bookBtn = (typeof auth !== 'undefined' && auth.getUser() && auth.getUser().role === 'tutor')
+            ? ''
+            : `<button class="btn btn-outline btn-sm" style="width: 100%; font-size: var(--font-size-sm);"
+                 onclick="openBookingModal('${tutor._id}', '${safeName}', '${safeSubjects}', ${tutor.hourlyRate || 0})">
+                 Book Session
+               </button>`;
+
         card.innerHTML = `
-            <div style="display: flex; align-items: start; gap: var(--space-4); margin-bottom: var(--space-4);">
-                <div style="flex-shrink: 0;">
-                    ${profileHtml}
+            <!-- Left: Avatar -->
+            <div class="tutor-hz-avatar">
+                ${avatarHtml}
+            </div>
+
+            <!-- Center: Info -->
+            <div class="tutor-hz-info">
+                <div class="tutor-name-row">
+                    <h4 class="tutor-name">${tutor.fullName}</h4>
+                    ${verifiedBadge}
                 </div>
-                <div style="flex: 1;">
-                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: var(--space-2);">
-                        <h4 style="margin: 0;">${tutor.fullName}</h4>
-                        ${verifiedBadge}
-                    </div>
-                    <div class="stars mb-2" style="color: var(--color-warning);">
-                        ${stars} 
-                        <a href="#" onclick="openViewReviewsModal('${tutor._id}'); return false;" style="color: var(--color-text-muted); text-decoration: underline; margin-left: 5px; font-size: var(--font-size-sm);">
+                <a href="profile.html?id=${tutor._id}" class="tutor-tagline">${qualText}</a>
+                ${workExpHtml}
+                <div class="tutor-bio-snippet">
+                    ${bioSnippet}
+                    <a href="profile.html?id=${tutor._id}">See ${firstName}'s full profile</a>
+                </div>
+                <div class="tutor-subjects-row">
+                    ${subjectsHtml}
+                </div>
+            </div>
+
+            <!-- Right: Stats + CTA -->
+            <div class="tutor-hz-stats">
+                <div class="stats-top">
+                    <div class="tutor-rating-row">
+                        <span class="stars">${stars}</span>
+                        <a href="#" onclick="openViewReviewsModal('${tutor._id}'); return false;" class="review-count" style="text-decoration: underline; cursor: pointer;">
                             (${tutor.totalReviews || 0} reviews)
                         </a>
                     </div>
-                    <p class="text-muted" style="font-size: var(--font-size-sm); margin: 0;">${tutor.qualification || 'Tutor'} • ${tutor.experience || '0'} years exp</p>
+                    <div class="tutor-rate">R${tutor.hourlyRate || 0}</div>
+                    <div class="tutor-rate-label">per hour</div>
+                    <div class="tutor-meta-row">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>${tutor.experience || '0'} yrs experience</span>
+                    </div>
                 </div>
-            </div>
-
-            <div style="margin-bottom: var(--space-4);">
-                <div style="display: flex; flex-wrap: wrap; gap: var(--space-2); margin-bottom: var(--space-3);">
-                    ${subjectsHtml}
-                </div>
-                ${tutor.workExperience ? `
-                <p style="color: var(--color-text-secondary); font-size: var(--font-size-sm); margin-bottom: var(--space-2); font-weight: 500;">
-                    <i class="fas fa-briefcase" style="margin-right: 5px; color: var(--color-primary);"></i>
-                    ${tutor.workExperience.length > 50 ? tutor.workExperience.substring(0, 50) + '...' : tutor.workExperience}
-                </p>` : ''}
-                <p style="color: var(--color-text-secondary); font-size: var(--font-size-sm); line-height: var(--line-height-relaxed); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
-                    ${tutor.bio || 'No bio available.'}
-                </p>
-            </div>
-
-            <div class="card-footer" style="display: flex; justify-content: space-between; align-items: center;">
-                <div>
-                    <p style="font-size: var(--font-size-sm); color: var(--color-text-muted); margin-bottom: 0;">Starting from</p>
-                    <p style="font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); color: var(--color-primary); margin: 0;">R${tutor.hourlyRate || 0}/hr</p>
-                </div>
-
-                <div style="display: flex; gap: 10px;">
-                    ${(typeof auth !== 'undefined' && auth.getUser() && auth.getUser().role === 'admin') ?
-                `<button class="btn btn-reject" style="padding: 8px 15px; background-color: #ef4444; color: white; border: none; border-radius: 6px; cursor: pointer;" onclick="deleteTutor('${tutor._id}')">Delete</button>` : ''
-            }
-                     <a href="profile.html?id=${tutor._id}" class="btn btn-outline" style="padding: 8px 15px; text-decoration: none;">View Profile</a>
-                    ${(typeof auth !== 'undefined' && auth.getUser() && auth.getUser().role === 'tutor') ? '' :
-                `<button class="btn btn-primary" onclick="openBookingModal('${tutor._id}', '${safeName}', '${safeSubjects}', ${tutor.hourlyRate || 0})">Book Session</button>`
-            }
+                <div class="stats-actions">
+                    <a href="profile.html?id=${tutor._id}" class="btn-view-profile">
+                        View ${firstName}'s Profile
+                    </a>
+                    ${bookBtn}
+                    ${deleteBtn}
                 </div>
             </div>
         `;
