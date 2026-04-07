@@ -5,8 +5,8 @@ window.viewUserProfile = function(tutorId) {
         alert('Invalid tutor profile link.');
         return;
     }
-    // Wyzant logic: open full profile in a new tab so search state is maintained
-    window.open(`profile.html?id=${tutorId}`, '_blank');
+    // Navigate to full profile
+    window.location.href = `profile.html?id=${tutorId}`;
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -76,7 +76,7 @@ async function fetchTutors() {
         // The local API returns Mongoose models properties exactly as they are defined (camelCase)
         // We match them mapping the id correctly as Mongoose returns `_id` 
         const normalized = tutors.map(t => ({
-            _id: t._id,
+            _id: t._id || t.id,
             fullName: t.fullName,
             email: t.email,
             phone: t.phone,
@@ -212,7 +212,7 @@ function renderTutors(tutors) {
                 ${workExpHtml}
                 <div class="tutor-bio-snippet">
                     ${bioSnippet}
-                    <a href="profile.html?id=${tutor._id}">See ${firstName}'s full profile</a>
+                    <a href="profile.html?id=${tutor._id}" style="text-decoration: underline;">See ${firstName}'s full profile</a>
                 </div>
                 <div class="tutor-subjects-row">
                     ${subjectsHtml}
